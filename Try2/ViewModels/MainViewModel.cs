@@ -2063,6 +2063,7 @@ namespace Try2.ViewModels
             xlWorkBook.Close(true, misValue, misValue);
             xlApp.Quit();
             Marshal.ReleaseComObject(xlWorkSheet);
+            Marshal.ReleaseComObject(worksheets);
             Marshal.ReleaseComObject(xlWorkBook);
             Marshal.ReleaseComObject(xlApp);
             MessageBox.Show("Файл excel был создан, вы можете найти его в загрузках");
