@@ -264,9 +264,9 @@ namespace Try2.Data
                     Name = $"Машина {i}",
                     GosNumber = $"{(char)rnd.Next('A', 'Z' + 1)}{(char)rnd.Next('A', 'Z' + 1)}{rnd.Next(0, 10)}{rnd.Next(0, 10)}{rnd.Next(0, 10)}{rnd.Next(0, 10)}{(char)rnd.Next('A', 'Z' + 1)}{(char)rnd.Next('A', 'Z' + 1)}",
                     Brand = rnd.NextItem(_Brands),
-                    LoadCapacity = $"{rnd.Next(1, 29)}",
+                    LoadCapacity = rnd.Next(1, 29),
                     Purpose = $"Назначение {rnd.Next(1,11)}",
-                    YearOfIssue = rnd.Next(2004, 2023).ToString(),
+                    YearOfIssue = new DateTime(rnd.Next(2005, 2024), rnd.Next(1, 13), rnd.Next(1, 29)),
                     Mileage = rnd.Next(1000, 150000)
                     
                 }
@@ -397,7 +397,7 @@ namespace Try2.Data
                     Client = rnd.NextItem(_Clients),
                     LoadingAddress = $"Адрес загрузки {rnd.Next(1,401)}",
                     UnloadingAddress = $"Адрес разгрузки {rnd.Next(1, 401)}",
-                    RouteLength = $"{rnd.Next(250, 100000)}",
+                    RouteLength = rnd.Next(250, 100000),
                     OrderCost = (decimal) rnd.NextDouble() * 100000 + 1000,
                     Flight = rnd.NextItem(_Flights)
 
@@ -448,8 +448,8 @@ namespace Try2.Data
                 {
                     Name = $"Груз {i}",
                     Unit = rnd.NextItem(_Units),
-                    Amount = rnd.Next(1, 200).ToString(),
-                    Weight = rnd.Next(1, 27000).ToString(),
+                    Amount = rnd.Next(1, 1000),
+                    Weight = rnd.Next(1, 27000),
                     Order = rnd.NextItem(_Orders),
                     InsuranceValue = (decimal) rnd.NextDouble() * 40000 + 2000
                 }

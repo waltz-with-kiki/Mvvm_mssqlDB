@@ -12,7 +12,7 @@ using Try2.Context;
 namespace Try2.Migrations
 {
     [DbContext(typeof(UsersContext))]
-    [Migration("20230805064422_NewMigration")]
+    [Migration("20230909085247_NewMigration")]
     partial class NewMigration
     {
         /// <inheritdoc />
@@ -39,8 +39,8 @@ namespace Try2.Migrations
                     b.Property<string>("GosNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LoadCapacity")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("LoadCapacity")
+                        .HasColumnType("int");
 
                     b.Property<int>("Mileage")
                         .HasColumnType("int");
@@ -52,11 +52,11 @@ namespace Try2.Migrations
                     b.Property<string>("Purpose")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("YearOfIssue")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("YearOfIssue")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("YearOfRepair")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("YearOfRepair")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -346,8 +346,8 @@ namespace Try2.Migrations
                     b.Property<DateTime>("OrderData")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RouteLength")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("RouteLength")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UnloadingAddress")
                         .HasColumnType("nvarchar(max)");

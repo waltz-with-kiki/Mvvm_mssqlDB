@@ -1759,7 +1759,7 @@ namespace Try2.ViewModels
                     //{
                       //  collection.Add(new Cargo { Id = int.Parse(item) });
                     //}
-                    Order order = new Order { Client = _ClientsRep.Items.Where(x => x.Id == int.Parse(str[1])).FirstOrDefault(), OrderData = DateTime.ParseExact(str[2], "dd/MM/yyyy", null), LoadingAddress = str[3], UnloadingAddress = str[4], RouteLength = str[5], OrderCost = Convert.ToDecimal(str[6]), Flight = _FlightsRep.Items.Where(x => x.Id == int.Parse(str[7])).FirstOrDefault()};
+                    Order order = new Order { Client = _ClientsRep.Items.Where(x => x.Id == int.Parse(str[1])).FirstOrDefault(), OrderData = DateTime.ParseExact(str[2], "dd/MM/yyyy", null), LoadingAddress = str[3], UnloadingAddress = str[4], RouteLength = Convert.ToDecimal(str[5]), OrderCost = Convert.ToDecimal(str[6]), Flight = _FlightsRep.Items.Where(x => x.Id == int.Parse(str[7])).FirstOrDefault()};
                     // if((_ClientsRep.Items.Any(x => x.Id == order.Client.Id)) && (_FlightsRep.Items.Any(x => x.Id == order.Flight.Id))
                     Orders.Add(_OrdersRep.Add(order));
                     // orders.Add(order);          

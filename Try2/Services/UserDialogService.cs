@@ -69,8 +69,8 @@ namespace Try2.Services
                     order.Client = order_editor_model.ClientId;
                     order.LoadingAddress = order_editor_model.LoadingAddress;
                     order.UnloadingAddress = order_editor_model.UploadingAddress;
-                    order.RouteLength = order_editor_model.RouteLength;
-                    order.OrderCost = order_editor_model.Cost;
+                    order.RouteLength = Convert.ToInt32(order_editor_model.RouteLength);
+                    order.OrderCost = Convert.ToInt32(order_editor_model.Cost);
                     order.Flight = order_editor_model.Flight;
 
 
@@ -244,11 +244,11 @@ namespace Try2.Services
                     automobile.Name = automobile_editor_model.Name;
                     automobile.GosNumber = automobile_editor_model.GosNumber;
                     automobile.Brand = automobile_editor_model.Brand;
-                    automobile.LoadCapacity = automobile_editor_model.LoadCapacity;
+                    automobile.LoadCapacity = Convert.ToInt32(automobile_editor_model.LoadCapacity);
                     automobile.Purpose = automobile_editor_model.Purpose;
                     automobile.YearOfIssue = automobile_editor_model.YearOfIssue;
                     automobile.YearOfRepair = automobile_editor_model.YearOfRepair;
-                    automobile.Mileage = automobile_editor_model.Millage;
+                    automobile.Mileage = Convert.ToInt32(automobile_editor_model.Millage);
 
 
                     return true;
@@ -364,10 +364,10 @@ namespace Try2.Services
                     }
 
                     cargo.Name = cargo_editor_model.Name;
-                    cargo.Amount = cargo_editor_model.Amount;
-                    cargo.Weight = cargo_editor_model.Weight;
+                    cargo.Amount = Convert.ToInt32(cargo_editor_model.Amount);
+                    cargo.Weight = Convert.ToInt32(cargo_editor_model.Weight);
                     cargo.Unit = cargo_editor_model.Unit;
-                    cargo.InsuranceValue = cargo_editor_model.Value;
+                    cargo.InsuranceValue = Convert.ToInt32(cargo_editor_model.Value);
                     cargo.Order = cargo_editor_model.Order;
 
 
@@ -463,8 +463,8 @@ namespace Try2.Services
                     order.Client = order_editor_model.ClientId;
                     order.LoadingAddress = order_editor_model.LoadingAddress;
                     order.UnloadingAddress = order_editor_model.UploadingAddress;
-                    order.RouteLength = order_editor_model.RouteLength;
-                    order.OrderCost = order_editor_model.Cost;
+                    order.RouteLength = Convert.ToDecimal(order_editor_model.RouteLength);
+                    order.OrderCost = Convert.ToDecimal(order_editor_model.Cost);
                     order.Flight = order_editor_model.Flight;
 
 
@@ -642,11 +642,11 @@ namespace Try2.Services
                     automobile.Name = automobile_editor_model.Name;
                     automobile.GosNumber = automobile_editor_model.GosNumber;
                     automobile.Brand = automobile_editor_model.Brand;
-                    automobile.LoadCapacity = automobile_editor_model.LoadCapacity;
+                    automobile.LoadCapacity = Convert.ToInt32(automobile_editor_model.LoadCapacity);
                     automobile.Purpose = automobile_editor_model.Purpose;
                     automobile.YearOfIssue = automobile_editor_model.YearOfIssue;
                     automobile.YearOfRepair = automobile_editor_model.YearOfRepair;
-                    automobile.Mileage = automobile_editor_model.Millage;
+                    automobile.Mileage = Convert.ToInt32(automobile_editor_model.Millage);
 
 
                     return true;
@@ -767,10 +767,10 @@ namespace Try2.Services
                     }
 
                     cargo.Name = cargo_editor_model.Name;
-                    cargo.Amount = cargo_editor_model.Amount;
-                    cargo.Weight = cargo_editor_model.Weight;
+                    cargo.Amount = Convert.ToInt32(cargo_editor_model.Amount);
+                    cargo.Weight = Convert.ToInt32(cargo_editor_model.Weight);
                     cargo.Unit = cargo_editor_model.Unit;
-                    cargo.InsuranceValue = cargo_editor_model.Value;
+                    cargo.InsuranceValue = Convert.ToDecimal(cargo_editor_model.Value);
                     cargo.Order = cargo_editor_model.Order;
 
 
@@ -786,15 +786,18 @@ namespace Try2.Services
         {
             public CargoValidator()
             {
-                ulong result;
+                BigInteger res;
+                Decimal s;
+
 
                 RuleFor(cargo => cargo.Name).NotEmpty().MinimumLength(3);
                 RuleFor(cargo => cargo.Amount).NotEmpty();
-                RuleFor(cargo => cargo.Amount).Must(amount => ulong.TryParse(amount, out result)).WithMessage("Количество должно быть задано числом");
+                RuleFor(cargo => cargo.Amount).Must(amount => BigInteger.TryParse(amount, out res)).WithMessage("Количество должно быть числом");
                 RuleFor(cargo => cargo.Weight).NotEmpty();
-                RuleFor(cargo => cargo.Weight).Must(weight => ulong.TryParse(weight, out result)).WithMessage("Вес должен быть задан числом");
+                RuleFor(cargo => cargo.Weight).Must(weight => BigInteger.TryParse(weight, out res)).WithMessage("Масса должна быть числом");
                 RuleFor(cargo => cargo.Unit.Name).NotEmpty().When(cargo => cargo.Unit != null);
-                RuleFor(cargo => cargo.Value).NotEmpty().ExclusiveBetween(1, 100000000);
+                RuleFor(cargo => cargo.Value).NotEmpty();
+                RuleFor(cargo => cargo.Value).Must(value => Decimal.TryParse(value, out s)).WithMessage("Стоимость должна быть числом, следует использовать запятую, для не целых чисел");
                 RuleFor(cargo => cargo.Order).NotEmpty();
 
                 //RuleFor(automobile => automobile.Brand.Name).NotEmpty().When(automobile => automobile.Brand != null);
@@ -841,7 +844,7 @@ namespace Try2.Services
             public AutomobileValidator()
             {
                 BigInteger res;
-                RuleFor(automobile => automobile.Name).NotEmpty().MinimumLength(3);
+                RuleFor(automobile => automobile.Name).NotEmpty().MinimumLength(2);
                 RuleFor(automobile => automobile.GosNumber).NotEmpty().Length(8,9);
                 RuleFor(automobile => automobile.Brand.Name).NotEmpty().When(automobile => automobile.Brand != null);
                 RuleFor(automobile => automobile.LoadCapacity).NotEmpty();
@@ -849,8 +852,10 @@ namespace Try2.Services
                 //.When(automobile => ulong.TryParse(automobile.LoadCapacity, out result));
                 RuleFor(automobile => automobile.Purpose).NotEmpty().ToFormattedString();
                 RuleFor(automobile => automobile.YearOfIssue).NotEmpty();
-                RuleFor(automobile => automobile.YearOfIssue).Must(year => BigInteger.TryParse(year, out res)).WithMessage("Неверный формат года выпуска");
-                RuleFor(automobile => automobile.Millage).NotEmpty().ExclusiveBetween(1, 100000000);
+
+               // RuleFor(automobile => automobile.YearOfIssue).Must(year => BigInteger.TryParse(year, out res)).WithMessage("Неверный формат года выпуска");
+                RuleFor(automobile => automobile.Millage).NotEmpty();
+                RuleFor(automobile => automobile.Millage).Must(mill => BigInteger.TryParse(mill, out res)).WithMessage("Пробег должен быть числом");
             }
         }
 
@@ -931,16 +936,20 @@ namespace Try2.Services
         {
             public OrderValidator()
             {
-                ulong result;
-                decimal res;
+                //BigInteger res;
+                //Double s;
+                Decimal s;
+
                 RuleFor(order => order.ClientId).NotEmpty();
                 RuleFor(order => order.OrderDate).NotEmpty();
                 RuleFor(order => order.OrderDate).Must(date => date.Year >= 2015).WithMessage("Неверный формат времени");
                 RuleFor(order => order.LoadingAddress).NotEmpty().MinimumLength(3);
                 RuleFor(order => order.UploadingAddress).NotEmpty().MinimumLength(3);
-                RuleFor(order => order.RouteLength).NotEmpty().MinimumLength(3);
-                RuleFor(order => order.RouteLength).Must(length => ulong.TryParse(length, out result)).WithMessage("Неверный формат длины");
-                RuleFor(order => order.Cost).NotEmpty().ExclusiveBetween(1, 100000000);
+                RuleFor(order => order.RouteLength).NotEmpty();
+                RuleFor(order => order.RouteLength).Must(length => Decimal.TryParse(length, out s)).WithMessage("Длина должна быть числом, следует использовать запятую, для не целых чисел");
+                //RuleFor(order => order.RouteLength).Must(length => ulong.TryParse(length, out result)).WithMessage("Неверный формат длины");
+                RuleFor(order => order.Cost).NotEmpty();
+                RuleFor(order => order.Cost).Must(cost => Decimal.TryParse(cost, out s)).WithMessage("Цена должна быть числом, следует использовать запятую, для не целых чисел");
                 RuleFor(order => order.Flight).NotEmpty();
             }
         }

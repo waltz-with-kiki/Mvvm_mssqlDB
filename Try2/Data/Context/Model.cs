@@ -152,7 +152,8 @@ namespace Try2.Context
 
         public string? UnloadingAddress { get; set; }
 
-        public string? RouteLength { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal RouteLength { get; set; } //decimal
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal OrderCost { get; set; }
@@ -171,9 +172,9 @@ namespace Try2.Context
     {
         public virtual Unit? Unit { get; set; }
 
-        public string Amount { get; set; }
+        public int Amount { get; set; } //decimal
 
-        public string Weight { get; set; }
+        public int Weight { get; set; } //decimal
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal InsuranceValue { get; set; }
@@ -270,13 +271,13 @@ namespace Try2.Context
 
         public virtual Brand? Brand { get; set; }
 
-        public string? LoadCapacity { get; set; }
+        public int LoadCapacity { get; set; } // int или decimal
 
         public string? Purpose { get; set; }
 
-        public string? YearOfIssue { get; set; }
+        public DateTime YearOfIssue { get; set; } //DateTime
 
-        public string? YearOfRepair { get; set; }
+        public DateTime YearOfRepair { get; set; } //DateTime
 
         public int Mileage { get; set; }
 

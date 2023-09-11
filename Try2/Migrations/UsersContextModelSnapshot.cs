@@ -36,8 +36,8 @@ namespace Try2.Migrations
                     b.Property<string>("GosNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LoadCapacity")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("LoadCapacity")
+                        .HasColumnType("int");
 
                     b.Property<int>("Mileage")
                         .HasColumnType("int");
@@ -49,11 +49,11 @@ namespace Try2.Migrations
                     b.Property<string>("Purpose")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("YearOfIssue")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("YearOfIssue")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("YearOfRepair")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("YearOfRepair")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -104,7 +104,7 @@ namespace Try2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Amount")
+                    b.Property<int>("Amount")
                         .HasColumnType("int");
 
                     b.Property<decimal>("InsuranceValue")
@@ -120,7 +120,7 @@ namespace Try2.Migrations
                     b.Property<int?>("UnitId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Weight")
+                    b.Property<int>("Weight")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -343,8 +343,8 @@ namespace Try2.Migrations
                     b.Property<DateTime>("OrderData")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RouteLength")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("RouteLength")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UnloadingAddress")
                         .HasColumnType("nvarchar(max)");

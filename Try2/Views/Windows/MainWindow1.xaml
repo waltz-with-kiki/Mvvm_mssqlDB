@@ -8,10 +8,13 @@
         xmlns:vm="clr-namespace:Try2.ViewModels"
         DataContext="{Binding MainModel, Source={StaticResource Locator}}"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="600" Width="1000">
+        Title="{Binding Title}" Height="600" Width="1100">
     
     <Window.Resources>
     <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="AliceBlue"/>
+        </Style>
 </Window.Resources>
 
     <i:Interaction.Triggers>
@@ -19,6 +22,7 @@
             <i:InvokeCommandAction Command="{Binding LoadDataCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
+
 
 
 
@@ -83,13 +87,13 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddOrder" Content="Добавить" Command="{Binding AddNewOrder}" Width="100" Height="25" />
-                        <Button x:Name="RemoveOrder" Content="Удалить" Command="{Binding DeleteOrder}" Width="100" Height="25" />
-                        <Button x:Name="EditOrder" Content="Редактировать" Command="{Binding EditOrder}" Width="100" Height="25" />
-                        <TextBox x:Name="TextOrderSearch" Text="{Binding SearchTextOrder}" Width="150" Height="25"/>
-                        <Button x:Name="SearchOrder" Content="Поиск" Command="{Binding SearchOrder}" Width="75" Height="20" />
-                        <ComboBox x:Name="SearchOrderSelect" Width="125" Height="20" ItemsSource="{Binding OrderSearchList}" SelectedItem="{Binding OrderSearchSelect}"/>
-                        <Button x:Name="Import" Content="Импорт" Width="75" Height="20" Command="{Binding ExcelImport}"/>
+                        <Button x:Name="AddOrder" Content="Добавить" Command="{Binding AddNewOrder}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveOrder" Content="Удалить" Command="{Binding DeleteOrder}" Width="100" Height="25" Margin="0, 0, 5, 0" />
+                        <Button x:Name="EditOrder" Content="Редактировать" Command="{Binding EditOrder}" Width="100" Height="25" Margin="0, 0, 170, 0"/>
+                        <TextBox x:Name="TextOrderSearch" Text="{Binding SearchTextOrder}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="SearchOrder" Content="Поиск" Command="{Binding SearchOrder}" Width="75" Height="20" Margin="0, 0, 5, 0" />
+                        <ComboBox x:Name="SearchOrderSelect" Width="125" Height="20" ItemsSource="{Binding OrderSearchList}" SelectedItem="{Binding OrderSearchSelect}" Margin="0, 0, 10, 0"/>
+                        <Button x:Name="Import" Content="Импорт" Width="75" Height="20" Command="{Binding ExcelImport}" Margin="0, 0, 5, 0"/>
                         <Button x:Name="Export" Content="Экспорт" Width="75" Height="20" Command="{Binding ExcelExport}"/>
                     </StackPanel>
                 </Grid>
@@ -125,8 +129,8 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddPhysClient" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewPhysClient}" />
-                        <Button x:Name="RemovePhysClient" Content="Удалить" Command="{Binding DeletePhysClient}" Width="100" Height="25" />
+                        <Button x:Name="AddPhysClient" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewPhysClient}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemovePhysClient" Content="Удалить" Command="{Binding DeletePhysClient}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
                         <Button x:Name="EditPhysClient" Content="Редактировать" Command="{Binding EditPhysClient}" Width="100" Height="25" />
                     </StackPanel>
                 </Grid>
@@ -162,9 +166,9 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddLegalClient" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewLegalClient}" />
-                        <Button x:Name="RemoveLegalClient" Content="Удалить" Command="{Binding DeleteLegalClient}" Width="100" Height="25" />
-                        <Button x:Name="EditLegalClient" Content="Редактировать" Command="{Binding EditLegalClient}" Width="100" Height="25" />
+                        <Button x:Name="AddLegalClient" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewLegalClient}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveLegalClient" Content="Удалить" Command="{Binding DeleteLegalClient}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="EditLegalClient" Content="Редактировать" Command="{Binding EditLegalClient}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
                     </StackPanel>
                 </Grid>
 
@@ -195,11 +199,11 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddFlight" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewFlight}" />
-                        <Button x:Name="RemoveFlight" Content="Удалить" Command="{Binding DeleteFlight}" Width="100" Height="25" />
-                        <Button x:Name="EditFlight" Content="Редактировать" Command="{Binding EditFlight}" Width="100" Height="25" />
-                        <TextBox x:Name="TextSearchFlight" Text="{Binding SearchTextFlight}" Width="150" Height="25"/>
-                        <Button x:Name="SearchFlight" Content="Поиск" Command="{Binding SearchFlight}" Width="75" Height="20" />
+                        <Button x:Name="AddFlight" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewFlight}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveFlight" Content="Удалить" Command="{Binding DeleteFlight}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="EditFlight" Content="Редактировать" Command="{Binding EditFlight}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
+                        <TextBox x:Name="TextSearchFlight" Text="{Binding SearchTextFlight}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="SearchFlight" Content="Поиск" Command="{Binding SearchFlight}" Width="75" Height="20" Margin="0, 0, 5, 0"/>
                         <ComboBox x:Name="FlightSearchSelect" Width="125" Height="20" ItemsSource="{Binding FlightSearchList}" SelectedItem="{Binding FlightSearchSelect}"/>
                     </StackPanel>
                 </Grid>
@@ -229,8 +233,8 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddCrew" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewCrew}" />
-                        <Button x:Name="RemoveCrew" Content="Удалить" Command="{Binding DeleteCrew}" Width="100" Height="25" />
+                        <Button x:Name="AddCrew" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewCrew}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveCrew" Content="Удалить" Command="{Binding DeleteCrew}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
                         <Button x:Name="EditCrew" Content="Редактировать" Command="{Binding EditCrew}" Width="100" Height="25" />
                     </StackPanel>
                 </Grid>
@@ -266,11 +270,11 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddDriver" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewDriver}" />
-                        <Button x:Name="RemoveDriver" Content="Удалить" Command="{Binding DeleteDriver}" Width="100" Height="25" />
-                        <Button x:Name="EditDriver" Content="Редактировать" Command="{Binding EditDriver}" Width="100" Height="25" />
-                        <TextBox x:Name="TextSearchDriver" Text="{Binding SearchTextDriver}" Width="150" Height="25"/>
-                        <Button x:Name="SearchDriver" Content="Поиск" Command="{Binding SearchDriver}" Width="75" Height="20" />
+                        <Button x:Name="AddDriver" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewDriver}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveDriver" Content="Удалить" Command="{Binding DeleteDriver}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="EditDriver" Content="Редактировать" Command="{Binding EditDriver}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
+                        <TextBox x:Name="TextSearchDriver" Text="{Binding SearchTextDriver}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="SearchDriver" Content="Поиск" Command="{Binding SearchDriver}" Width="75" Height="20" Margin="0, 0, 5, 0"/>
                         <ComboBox x:Name="DriverSearchSelect" Width="125" Height="20" ItemsSource="{Binding DriverSearchList}" SelectedItem="{Binding DriverSearchSelect}"/>
                     </StackPanel>
                 </Grid>
@@ -308,10 +312,10 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddAutomobile" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewAutomobile}"/>
-                        <Button x:Name="RemoveAutomobile" Content="Удалить" Command="{Binding DeleteAutomobile}" Width="100" Height="25" />
-                        <Button x:Name="EditAutomobile" Content="Редактировать" Command="{Binding EditAutomobile}" Width="100" Height="25" />
-                        <TextBox x:Name="TextSearchAutomobile" Text="{Binding SearchTextAutomobile}" Width="150" Height="25"/>
+                        <Button x:Name="AddAutomobile" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewAutomobile}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveAutomobile" Content="Удалить" Command="{Binding DeleteAutomobile}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="EditAutomobile" Content="Редактировать" Command="{Binding EditAutomobile}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
+                        <TextBox x:Name="TextSearchAutomobile" Text="{Binding SearchTextAutomobile}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
                         <Button x:Name="SearchAutomobile" Content="Поиск по бренду" Command="{Binding SearchAutomobile}" Width="100" Height="20" />
                         
                     </StackPanel>
@@ -341,8 +345,8 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddBrand" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewBrand}" />
-                        <Button x:Name="RemoveBrand" Content="Удалить" Command="{Binding DeleteBrand}" Width="100" Height="25" />
+                        <Button x:Name="AddBrand" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewBrand}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveBrand" Content="Удалить" Command="{Binding DeleteBrand}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
                         <Button x:Name="EditBrand" Content="Редактировать" Command="{Binding EditBrand}" Width="100" Height="25" />
                     </StackPanel>
                 </Grid>
@@ -372,11 +376,11 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddCheck" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewChecking_Account}" />
-                        <Button x:Name="RemoveCheck" Content="Удалить" Command="{Binding DeleteChecking_account}" Width="100" Height="25" />
-                        <Button x:Name="EditCheck" Content="Редактировать" Command="{Binding EditChecking_Account}" Width="100" Height="25" />
-                        <TextBox x:Name="TextSearchCheck" Text="{Binding SearchTextCheck}" Width="150" Height="25"/>
-                        <Button x:Name="SearchCheck" Content="Поиск" Command="{Binding SearchCheck}" Width="75" Height="20" />
+                        <Button x:Name="AddCheck" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewChecking_Account}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveCheck" Content="Удалить" Command="{Binding DeleteChecking_account}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="EditCheck" Content="Редактировать" Command="{Binding EditChecking_Account}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
+                        <TextBox x:Name="TextSearchCheck" Text="{Binding SearchTextCheck}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="SearchCheck" Content="Поиск" Command="{Binding SearchCheck}" Width="75" Height="20" Margin="0, 0, 5, 0"/>
                         <ComboBox x:Name="CheckSearchSelect" Width="125" Height="20" ItemsSource="{Binding CheckSearchList}" SelectedItem="{Binding CheckSearchSelect}"/>
                     </StackPanel>
                 </Grid>
@@ -406,8 +410,8 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddBank" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewBank}" />
-                        <Button x:Name="RemoveBank" Content="Удалить" Command="{Binding DeleteBank}" Width="100" Height="25" />
+                        <Button x:Name="AddBank" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewBank}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveBank" Content="Удалить" Command="{Binding DeleteBank}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
                         <Button x:Name="EditBank" Content="Редактировать" Command="{Binding EditBank}" Width="100" Height="25" />
                     </StackPanel>
                 </Grid>
@@ -436,8 +440,8 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddUnit" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewUnit}" />
-                        <Button x:Name="RemoveUnit" Content="Удалить" Command="{Binding DeleteUnit}" Width="100" Height="25" />
+                        <Button x:Name="AddUnit" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewUnit}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveUnit" Content="Удалить" Command="{Binding DeleteUnit}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
                         <Button x:Name="EditUnit" Content="Редактировать" Command="{Binding EditUnit}" Width="100" Height="25" />
                     </StackPanel>
                 </Grid>
@@ -472,11 +476,11 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddCargo" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewCargo}"/>
-                        <Button x:Name="RemoveCargo" Content="Удалить" Command="{Binding DeleteCargo}" Width="100" Height="25" />
-                        <Button x:Name="EditCargo" Content="Редактировать" Command="{Binding EditCargo}" Width="100" Height="25" />
-                        <TextBox x:Name="TextSearchCargo" Text="{Binding SearchTextCargo}" Width="150" Height="25"/>
-                        <Button x:Name="SearchCargo" Content="Поиск" Command="{Binding SearchCargo}" Width="75" Height="20" />
+                        <Button x:Name="AddCargo" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewCargo}" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="RemoveCargo" Content="Удалить" Command="{Binding DeleteCargo}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="EditCargo" Content="Редактировать" Command="{Binding EditCargo}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
+                        <TextBox x:Name="TextSearchCargo" Text="{Binding SearchTextCargo}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                        <Button x:Name="SearchCargo" Content="Поиск" Command="{Binding SearchCargo}" Width="75" Height="20"  Margin="0, 0, 5, 0"/>
                         <ComboBox x:Name="CheckSearchCargo" Width="125" Height="20" ItemsSource="{Binding CargoSearchList}" SelectedItem="{Binding CargoSearchSelect}"/>
                     </StackPanel>
                 </Grid>
@@ -516,6 +520,50 @@
                 </DockPanel>
 
             </TabItem>
+
+            <TabItem Header="Справка">
+                <DockPanel Margin="3">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                            
+
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="1" Text="Добро пожаловать в приложение для управления грузовыми перевозками!" FontFamily="Times New Roman"></TextBlock>
+
+                        <Label Grid.Row="2" Content="О программе" FontSize="16" FontWeight="Bold" FontFamily="Times New Roman" HorizontalContentAlignment="Center" ></Label>
+                        <TextBlock Grid.Row="3" Text="Это приложение является частью информационной системы, предназначенной для эффективного управления грузовыми перевозками. Оно предоставляет удобный интерфейс для" FontFamily="Times New Roman" ></TextBlock>
+                        <TextBlock Grid.Row="4" Text="работы с базой данных, которая содержит информацию о грузах, транспорте, маршрутах и других связанных объектах в виде таблиц." FontFamily="Times New Roman"></TextBlock>
+
+                        <Label Grid.Row="5" Content="Возможности приложения" FontSize="16" FontWeight="Bold" FontFamily="Times New Roman" HorizontalContentAlignment="Center"></Label>
+                        <TextBlock Grid.Row="6" Text="1. Вы можете просматривать информацию в виде таблиц, легко добавлять, редактировать и удалять объекты. Всё настроено для быстрого поиска нужных данных." FontFamily="Times New Roman"></TextBlock>
+                        <TextBlock Grid.Row="7" Text="2. Добавление и редактирование новых объектов: Просто заполните соответствующую форму с необходимой информацией и сохраните новый объект." FontFamily="Times New Roman"></TextBlock>
+                        <TextBlock Grid.Row="8" Text="Некоторые данные будут требовать определённый ввод, такие как номер телефона, пасспорт и др... При неправильном вводе должна выйти ошибка-подсказка." Foreground="Red" FontFamily="Times New Roman"></TextBlock>
+                        <TextBlock Grid.Row="9" Text="3. Поиск данных: требуется выбрать критерий, к примеру, по номеру заказа, и тогда, при вводе нужного числа и нажатия кнопки поиск, отобразится изменённая таблица." FontFamily="Times New Roman"></TextBlock>
+                        <TextBlock Grid.Row="10" Text="4. Импорт: можно импортировать заказы, для этого требуется в директорий проекта добавить файл с названием: new_file, для успешного импорта колонки должны соответствовать." FontFamily="Times New Roman"></TextBlock>
+                        <TextBlock Grid.Row="11" Text="5. Экспорт: при нажатии на клавишу, находится она именно в заказах, происходит создание документа со всеми таблицами, документ сохраняется в Загрузках." FontFamily="Times New Roman"></TextBlock>
+                        <TextBlock Grid.Row="12" Text="6. Смена пароля пользователя: на вкладке User, просто введите свой старый и новый пароли и нажмите кнопочку - Смена пароля." FontFamily="Times New Roman"></TextBlock>
+                    </Grid>
+                </DockPanel>
+
+            </TabItem>
+
+
+
+
 
         </TabControl>
     </Grid>

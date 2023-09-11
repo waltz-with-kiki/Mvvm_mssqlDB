@@ -1,6 +1,7 @@
 ﻿using MathCore.WPF.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,21 +33,25 @@ namespace Try2.ViewModels
 
         public string LoadCapacity { get { return _LoadCapacity; } set => Set(ref _LoadCapacity, value); }
 
+
+    public string Error => null;
+
         private string _Purpose;
 
         public string Purpose { get { return _Purpose; } set => Set(ref _Purpose, value); }
 
-        private string _YearOfIssue;
+        private DateTime _YearOfIssue;
 
-        public string YearOfIssue { get { return _YearOfIssue; } set => Set(ref _YearOfIssue, value); }
+        public DateTime YearOfIssue { get { return _YearOfIssue; } set => Set(ref _YearOfIssue, value); }
 
-        private string _YearOfRepair;
+        private DateTime _YearOfRepair;
 
-        public string YearOfRepair { get { return _YearOfRepair; } set => Set(ref _YearOfRepair, value); }
+        public DateTime YearOfRepair { get { return _YearOfRepair; } set => Set(ref _YearOfRepair, value); }
 
-        private int _Millage;
+        private string _Millage;
 
-        public int Millage { get { return _Millage; } set => Set(ref _Millage, value); }
+        public string Millage { get { return _Millage; } set => Set(ref _Millage, value); }
+
 
 
         private readonly IRepository<Brand> _Brands;
@@ -77,11 +82,11 @@ namespace Try2.ViewModels
             Name = automobile.Name;
             GosNumber = automobile.GosNumber;
             Brand = automobile.Brand;
-            LoadCapacity = automobile.LoadCapacity;
+            LoadCapacity = automobile.LoadCapacity.ToString();
             Purpose = automobile.Purpose;
             YearOfIssue = automobile.YearOfIssue;
             YearOfRepair = automobile.YearOfRepair;
-            Millage = automobile.Mileage;
+            Millage = automobile.Mileage.ToString();
 
         }
 

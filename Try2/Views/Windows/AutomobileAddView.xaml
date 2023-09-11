@@ -39,19 +39,19 @@
             <ComboBox Grid.Row="2" Margin="10,0,0,0" Width="200" ItemsSource="{Binding Brands}" SelectedItem="{Binding Brand}"/>
 
             <TextBlock Grid.Row="3" Text="Грузоподъемность:"/>
-            <TextBox Grid.Row="3" Margin="10,0,0,0" Width="200" Text="{Binding LoadCapacity}"/>
+            <TextBox Grid.Row="3" Margin="10,0,0,0" Width="200" Text="{Binding LoadCapacity, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
 
             <TextBlock Grid.Row="4" Text="Назначение:"/>
             <TextBox Grid.Row="4" Margin="10,0,0,0" Width="200" Text="{Binding Purpose}"/>
 
             <TextBlock Grid.Row="5" Text="Год выпуска:"/>
-            <TextBox Grid.Row="5" Margin="10,0,0,0" Width="200" Text="{Binding YearOfIssue}"/>
+            <DatePicker Grid.Row="5" Margin="10,0,0,0" Width="200" SelectedDate="{Binding YearOfIssue}"/>
 
             <TextBlock Grid.Row="6" Text="Год ремонта:"/>
-            <TextBox Grid.Row="6" Margin="10,0,0,0" Width="200" Text="{Binding YearOfRepair}"/>
+            <DatePicker Grid.Row="6" Margin="10,0,0,0" Width="200" SelectedDate="{Binding YearOfRepair}"/>
 
             <TextBlock Grid.Row="7" Text="Пробег:"/>
-            <TextBox Grid.Row="7" Margin="10,0,0,0" Width="200" Text="{Binding Millage}"/>
+            <TextBox Grid.Row="7" Margin="10,0,0,0" Width="200" Text="{Binding Millage, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
         </Grid>
     </DockPanel>
 </Window>

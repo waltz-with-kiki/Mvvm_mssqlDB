@@ -133,10 +133,10 @@ namespace Try2.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     GosNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BrandId = table.Column<int>(type: "int", nullable: true),
-                    LoadCapacity = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LoadCapacity = table.Column<int>(type: "int", nullable: false),
                     Purpose = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    YearOfIssue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    YearOfRepair = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    YearOfIssue = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    YearOfRepair = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Mileage = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -268,7 +268,7 @@ namespace Try2.Migrations
                     ClientId = table.Column<int>(type: "int", nullable: true),
                     LoadingAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UnloadingAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RouteLength = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RouteLength = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FlightId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -294,8 +294,8 @@ namespace Try2.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UnitId = table.Column<int>(type: "int", nullable: true),
-                    Amount = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Weight = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    Weight = table.Column<int>(type: "int", nullable: false),
                     InsuranceValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -314,7 +314,6 @@ namespace Try2.Migrations
                         principalTable: "Units",
                         principalColumn: "Id");
                 });
-
 
             migrationBuilder.Sql("ALTER TABLE Users ALTER COLUMN Name VARCHAR(255) COLLATE SQL_Latin1_General_CP1_CS_AS");
 

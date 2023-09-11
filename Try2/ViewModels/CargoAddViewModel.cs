@@ -28,22 +28,22 @@ namespace Try2.ViewModels
 
         public string Name { get { return _Name; } set => Set(ref _Name, value); }
 
-        private string _Amount;
+        private string? _Amount;
 
-        public string Amount { get { return _Amount; } set => Set(ref _Amount, value); }
+        public string? Amount { get { return _Amount; } set => Set(ref _Amount, value); }
 
-        private string _Weight;
+        private string? _Weight;
 
-        public string Weight { get { return _Weight; } set => Set(ref _Weight, value); }
+        public string? Weight { get { return _Weight; } set => Set(ref _Weight, value); }
 
         private Unit _Unit;
 
         public Unit Unit { get { return _Unit; } set => Set(ref _Unit, value); }
 
 
-        private decimal _Value;
+        private string? _Value;
 
-        public decimal Value { get { return _Value; } set => Set(ref _Value, value); }
+        public string? Value { get { return _Value; } set => Set(ref _Value, value); }
 
 
         private Order _Order;
@@ -71,10 +71,10 @@ namespace Try2.ViewModels
 
 
             Name = cargo.Name;
-            Amount = cargo.Amount;
-            Weight = cargo.Weight;
+            Amount = cargo.Amount.ToString();
+            Weight = cargo.Weight.ToString();
             Unit = cargo.Unit;
-            Value = cargo.InsuranceValue;
+            Value = cargo.InsuranceValue.ToString();
             Order = cargo.Order;
         }
     }

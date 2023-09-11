@@ -1,6 +1,7 @@
 ﻿using MathCore.WPF.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,9 +15,9 @@ namespace Try2.ViewModels
 
         public string Title { get; set; }
 
-        private readonly IRepository<Client> _Clients;
+        private IRepository<Client> _Clients;
 
-        private readonly IRepository<Flight> _Flights;
+        private IRepository<Flight> _Flights;
 
         public List<Client> CClients {
             get
@@ -57,9 +58,9 @@ namespace Try2.ViewModels
 
         public string RouteLength { get { return _RouteLength; } set => Set(ref _RouteLength, value); }
 
-        private decimal _Cost;
+        private string _Cost;
 
-        public decimal Cost { get { return _Cost; } set => Set(ref _Cost, value); }
+        public string Cost { get { return _Cost; } set => Set(ref _Cost, value); }
 
         private Flight _Flight;
 
@@ -86,6 +87,7 @@ namespace Try2.ViewModels
         {
             _Clients = Clients;
             _Flights = Flights;
+
             Title = "OrderEditView";
 
             OrderId = order.Id;
@@ -93,9 +95,17 @@ namespace Try2.ViewModels
             ClientId = order.Client;
             LoadingAddress = order.LoadingAddress;
             UploadingAddress = order.UnloadingAddress;
-            RouteLength = order.RouteLength;
-            Cost = order.OrderCost;
+            RouteLength = order.RouteLength.ToString();
+            Cost = order.OrderCost.ToString();
             Flight = order.Flight;
+        }
+        
+
+        private async Task LoadFlightsAsync()
+        {
+            // Здесь загружаем данные из репозитория _Flights
+            // Может быть асинхронным вызовом к репозиторию
+            // Например, _Flights.LoadDataAsync();
         }
 
 
