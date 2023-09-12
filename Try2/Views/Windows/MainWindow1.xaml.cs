@@ -124,12 +124,15 @@ namespace Try2.Views.Windows
 
         private void ChangePassword(object sender, RoutedEventArgs e)
         {
-            if (md5.hashPassword(OldPassword.Password) == CurrentUser.Password && NewPassword.Password.Length > 3 && NewPassword.Password == PassRepeat.Password)
+            if (md5.hashPassword(OldPassword.Password) == CurrentUser.Password && NewPassword.Password.Length > 3 && NewPassword.Password == PassRepeat.Password && NewPassword.Password != OldPassword.Password)
             {
                 CurrentUser.Password = md5.hashPassword(NewPassword.Password);
                 //CurrentUser.Password
                 _UserRep.Update(CurrentUser);
                 MessageBox.Show("Пароль успешно изменён");
+                OldPassword.Clear();
+                NewPassword.Clear();
+                PassRepeat.Clear();
             }
             else
             {

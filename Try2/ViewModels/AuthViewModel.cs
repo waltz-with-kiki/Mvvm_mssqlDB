@@ -169,7 +169,7 @@ namespace Try2.ViewModels
 
         private void OnAddNewUserExecuted(object obj)
         {
-            if (NewUsername.Length < 4 || Number == null)
+            if (NewUsername.Length < 4 || Number == null || NewPassword.Length < 4)
             {
                 RegisterEror = "Не удалось зарегистрировать нового пользователя. Возможно не указан номер или длина пароля/логина меньше 4 символов";
             }
