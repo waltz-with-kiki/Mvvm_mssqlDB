@@ -94,6 +94,28 @@ namespace Try2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Structures",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ParentStructureId = table.Column<int>(type: "int", nullable: true),
+                    DLLName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    function = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    number = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Structures", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Structures_Structures_ParentStructureId",
+                        column: x => x.ParentStructureId,
+                        principalTable: "Structures",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Units",
                 columns: table => new
                 {
@@ -378,6 +400,11 @@ namespace Try2.Migrations
                 column: "FlightId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Structures_ParentStructureId",
+                table: "Structures",
+                column: "ParentStructureId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_RightId",
                 table: "Users",
                 column: "RightId");
@@ -391,6 +418,9 @@ namespace Try2.Migrations
 
             migrationBuilder.DropTable(
                 name: "Drivers");
+
+            migrationBuilder.DropTable(
+                name: "Structures");
 
             migrationBuilder.DropTable(
                 name: "Users");

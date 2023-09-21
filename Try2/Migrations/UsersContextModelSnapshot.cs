@@ -387,6 +387,37 @@ namespace Try2.Migrations
                     b.ToTable("Right");
                 });
 
+            modelBuilder.Entity("Try2.Context.Structure", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DLLName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentStructureId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("function")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("number")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentStructureId");
+
+                    b.ToTable("Structures");
+                });
+
             modelBuilder.Entity("Try2.Context.Unit", b =>
                 {
                     b.Property<int>("Id")
@@ -523,6 +554,15 @@ namespace Try2.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Flight");
+                });
+
+            modelBuilder.Entity("Try2.Context.Structure", b =>
+                {
+                    b.HasOne("Try2.Context.Structure", "ParentStructure")
+                        .WithMany()
+                        .HasForeignKey("ParentStructureId");
+
+                    b.Navigation("ParentStructure");
                 });
 
             modelBuilder.Entity("Try2.Context.User", b =>

@@ -9,9 +9,9 @@
         DataContext="{Binding MainModel, Source={StaticResource Locator}}"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="600" Width="1100">
-    
+
     <Window.Resources>
-    <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Style TargetType="Button">
             <Setter Property="Background" Value="AliceBlue"/>
         </Style>
@@ -28,543 +28,569 @@
 
     <Grid Visibility="{Binding isDataLoaded, Converter={StaticResource BoolToVisibilityConverter}}">
 
-        <TabControl>
-            <TabControl.Resources>
-                <BooleanToVisibilityConverter x:Key="B2V"/>
-   
-            </TabControl.Resources>
-            <TabItem Header="Заказы">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <Menu.ItemsSource>
+                    <Binding Path="Structures" />
+                </Menu.ItemsSource>
+                <Menu.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Header" Value="{Binding Name}" />
+                        <Setter Property="ItemsSource" Value="{Binding Catalogs}" />
+                        <Setter Property="Command" Value="{Binding Command}" />
+                        <Setter Property="ItemContainerStyle">
+                            <Setter.Value>
+                                <Style TargetType="{x:Type MenuItem}">
+                                    <Setter Property="Header" Value="{Binding Name}" />
+                                    <Setter Property="Command" Value="{Binding Command}" />
+                                </Style>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Menu.ItemContainerStyle>
+            </Menu>
 
-                    <DataGrid x:Name="OrdersGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Orders}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedOrder}" >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="OrdersView"
+
+            <TabControl>
+                <TabControl.Resources>
+                    <BooleanToVisibilityConverter x:Key="B2V"/>
+
+                </TabControl.Resources>
+
+                <TabItem Header="Заказы" IsSelected="{Binding isOrderTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <DataGrid x:Name="OrdersGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Orders}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedOrder}" >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="OrdersView"
                                                   Source="{Binding Orders}">
 
-                            </CollectionViewSource>
-                            
-
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Id}" Header="Номер заказа" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Client}" Header="Номер Клиента" Width="*" CanUserSort="False">
-                             
-
-                            </DataGridTextColumn>
-                            
-                            <DataGridTextColumn Binding="{Binding OrderData, StringFormat={}\{0:dd/MM/yyyy\}}" Header="Дата Заказа" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding LoadingAddress}" Header="Пункт погрузки" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding UnloadingAddress}" Header="Пункт разгрузки" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding RouteLength}" Header="Длина маршрута" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding OrderCost}" Header="Стоимость заказа" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Flight}" Header="Номер Рейса" Width="*" CanUserSort="False"/>
-                            <DataGridTemplateColumn Header="Перечень груза" Width="*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ItemsControl ItemsSource="{Binding Cargos}">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Horizontal"/>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding}" Margin="0,0,5,0"/>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddOrder" Content="Добавить" Command="{Binding AddNewOrder}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveOrder" Content="Удалить" Command="{Binding DeleteOrder}" Width="100" Height="25" Margin="0, 0, 5, 0" />
-                        <Button x:Name="EditOrder" Content="Редактировать" Command="{Binding EditOrder}" Width="100" Height="25" Margin="0, 0, 170, 0"/>
-                        <TextBox x:Name="TextOrderSearch" Text="{Binding SearchTextOrder}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="SearchOrder" Content="Поиск" Command="{Binding SearchOrder}" Width="75" Height="20" Margin="0, 0, 5, 0" />
-                        <ComboBox x:Name="SearchOrderSelect" Width="125" Height="20" ItemsSource="{Binding OrderSearchList}" SelectedItem="{Binding OrderSearchSelect}" Margin="0, 0, 10, 0"/>
-                        <Button x:Name="Import" Content="Импорт" Width="75" Height="20" Command="{Binding ExcelImport}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="Export" Content="Экспорт" Width="75" Height="20" Command="{Binding ExcelExport}"/>
-                    </StackPanel>
-                </Grid>
-
-            </TabItem>
+                                </CollectionViewSource>
 
 
-            <TabItem Header="Физические лица">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
-                        
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="PhysClientsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding PhysClients}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedPhysClient}" >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="PhysClientsView"
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Id}" Header="Номер заказа" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Client}" Header="Номер Клиента" Width="*" CanUserSort="False">
+
+
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding OrderData, StringFormat={}\{0:dd/MM/yyyy\}}" Header="Дата Заказа" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding LoadingAddress}" Header="Пункт погрузки" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding UnloadingAddress}" Header="Пункт разгрузки" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding RouteLength}" Header="Длина маршрута" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding OrderCost}" Header="Стоимость заказа" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Flight}" Header="Номер Рейса" Width="*" CanUserSort="False"/>
+                                <DataGridTemplateColumn Header="Перечень груза" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ItemsControl ItemsSource="{Binding Cargos}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding}" Margin="0,0,5,0"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddOrder" Content="Добавить" Command="{Binding AddNewOrder}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveOrder" Content="Удалить" Command="{Binding DeleteOrder}" Width="100" Height="25" Margin="0, 0, 5, 0" />
+                            <Button x:Name="EditOrder" Content="Редактировать" Command="{Binding EditOrder}" Width="100" Height="25" Margin="0, 0, 170, 0"/>
+                            <TextBox x:Name="TextOrderSearch" Text="{Binding SearchTextOrder}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="SearchOrder" Content="Поиск" Command="{Binding SearchOrder}" Width="75" Height="20" Margin="0, 0, 5, 0" />
+                            <ComboBox x:Name="SearchOrderSelect" Width="125" Height="20" ItemsSource="{Binding OrderSearchList}" SelectedItem="{Binding OrderSearchSelect}" Margin="0, 0, 10, 0"/>
+                            <Button x:Name="Import" Content="Импорт" Width="75" Height="20" Command="{Binding ExcelImport}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="Export" Content="Экспорт" Width="75" Height="20" Command="{Binding ExcelExport}"/>
+                        </StackPanel>
+                    </Grid>
+
+                </TabItem>
+
+
+                <TabItem Header="Физические лица" IsSelected="{Binding isPhysTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="PhysClientsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding PhysClients}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedPhysClient}" >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="PhysClientsView"
                                                   Source="{Binding PhysClients}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Id}" Header="Номер" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Имя" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Surname}" Header="Фамилия" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding SeriesAndNumberPass}" Header="Серия и номер pass" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding PhoneNumber}" Header="Номер телефона" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding DataOfIssue, StringFormat={}\{0:dd/MM/yyyy\}}" Header="Дата получения" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding IssuedBy}" Header="Кем выдан" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddPhysClient" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewPhysClient}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemovePhysClient" Content="Удалить" Command="{Binding DeletePhysClient}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditPhysClient" Content="Редактировать" Command="{Binding EditPhysClient}" Width="100" Height="25" />
-                    </StackPanel>
-                </Grid>
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Id}" Header="Номер" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Name}" Header="Имя" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Surname}" Header="Фамилия" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding SeriesAndNumberPass}" Header="Серия и номер pass" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding PhoneNumber}" Header="Номер телефона" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding DataOfIssue, StringFormat={}\{0:dd/MM/yyyy\}}" Header="Дата получения" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding IssuedBy}" Header="Кем выдан" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddPhysClient" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewPhysClient}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemovePhysClient" Content="Удалить" Command="{Binding DeletePhysClient}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditPhysClient" Content="Редактировать" Command="{Binding EditPhysClient}" Width="100" Height="25" />
+                        </StackPanel>
+                    </Grid>
 
-            </TabItem>
+                </TabItem>
 
-            <TabItem Header="Юридические лица">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
+                <TabItem Header="Юридические лица" IsSelected="{Binding isLegalTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="LegalClientsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding LegalClients}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedLegalClient}" >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="LegalClientsView"
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="LegalClientsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding LegalClients}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedLegalClient}" >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="LegalClientsView"
                                                   Source="{Binding LegalClients}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Id}" Header="Номер" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Имя" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Surname}" Header="Фамилия" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding LegalPersonName}" Header="Руководитель" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding PhoneNumber}" Header="Номер" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding LegalAdress}" Header="Юридический адрес" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Checking_Account}" Header="Расчетный счет" Width="*" CanUserSort="False" />
-                            <DataGridTextColumn Binding="{Binding Inn}" Header="Инн" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddLegalClient" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewLegalClient}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveLegalClient" Content="Удалить" Command="{Binding DeleteLegalClient}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditLegalClient" Content="Редактировать" Command="{Binding EditLegalClient}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                    </StackPanel>
-                </Grid>
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Id}" Header="Номер" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Name}" Header="Имя" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Surname}" Header="Фамилия" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding LegalPersonName}" Header="Руководитель" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding PhoneNumber}" Header="Номер" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding LegalAdress}" Header="Юридический адрес" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Checking_Account}" Header="Расчетный счет" Width="*" CanUserSort="False" />
+                                <DataGridTextColumn Binding="{Binding Inn}" Header="Инн" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddLegalClient" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewLegalClient}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveLegalClient" Content="Удалить" Command="{Binding DeleteLegalClient}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditLegalClient" Content="Редактировать" Command="{Binding EditLegalClient}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                        </StackPanel>
+                    </Grid>
 
-            </TabItem>
+                </TabItem>
 
-            <TabItem Header="Рейсы">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
+                <TabItem Header="Рейсы" IsSelected="{Binding isFlightTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="FlightsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Flights}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedFlight}"  >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="FlightsView"
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="FlightsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Flights}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedFlight}"  >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="FlightsView"
                                                   Source="{Binding Flights}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Id}" Header="Номер" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding ArrivalDate, StringFormat={}\{0:dd/MM/yyyy\}}" Header="Время прибытия" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Crew}" Header="Экипаж" Width="*" CanUserSort="False"/>
-                            <DataGridTextColumn Binding="{Binding Automobile}" Header="Номер Автомобиля" Width="*" CanUserSort="False"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddFlight" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewFlight}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveFlight" Content="Удалить" Command="{Binding DeleteFlight}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditFlight" Content="Редактировать" Command="{Binding EditFlight}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
-                        <TextBox x:Name="TextSearchFlight" Text="{Binding SearchTextFlight}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="SearchFlight" Content="Поиск" Command="{Binding SearchFlight}" Width="75" Height="20" Margin="0, 0, 5, 0"/>
-                        <ComboBox x:Name="FlightSearchSelect" Width="125" Height="20" ItemsSource="{Binding FlightSearchList}" SelectedItem="{Binding FlightSearchSelect}"/>
-                    </StackPanel>
-                </Grid>
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Id}" Header="Номер" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding ArrivalDate, StringFormat={}\{0:dd/MM/yyyy\}}" Header="Время прибытия" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Crew}" Header="Экипаж" Width="*" CanUserSort="False"/>
+                                <DataGridTextColumn Binding="{Binding Automobile}" Header="Номер Автомобиля" Width="*" CanUserSort="False"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddFlight" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewFlight}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveFlight" Content="Удалить" Command="{Binding DeleteFlight}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditFlight" Content="Редактировать" Command="{Binding EditFlight}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
+                            <TextBox x:Name="TextSearchFlight" Text="{Binding SearchTextFlight}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="SearchFlight" Content="Поиск" Command="{Binding SearchFlight}" Width="75" Height="20" Margin="0, 0, 5, 0"/>
+                            <ComboBox x:Name="FlightSearchSelect" Width="125" Height="20" ItemsSource="{Binding FlightSearchList}" SelectedItem="{Binding FlightSearchSelect}"/>
+                        </StackPanel>
+                    </Grid>
 
-            </TabItem>
+                </TabItem>
 
-            <TabItem Header="Экипажы">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
+                <TabItem Header="Экипажы" IsSelected="{Binding isCrewTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="CrewsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Crews}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedCrew}" >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="CrewsView"
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="CrewsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Crews}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedCrew}" >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="CrewsView"
                                                   Source="{Binding Crews}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Id}" Header="Номер" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddCrew" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewCrew}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveCrew" Content="Удалить" Command="{Binding DeleteCrew}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditCrew" Content="Редактировать" Command="{Binding EditCrew}" Width="100" Height="25" />
-                    </StackPanel>
-                </Grid>
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Id}" Header="Номер" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddCrew" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewCrew}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveCrew" Content="Удалить" Command="{Binding DeleteCrew}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditCrew" Content="Редактировать" Command="{Binding EditCrew}" Width="100" Height="25" />
+                        </StackPanel>
+                    </Grid>
 
-            </TabItem>
+                </TabItem>
 
 
-            <TabItem Header="Водители">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
+                <TabItem Header="Водители" IsSelected="{Binding isDriverTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="DriversGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Drivers}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedDriver}" >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="DriversView"
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="DriversGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Drivers}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedDriver}" >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="DriversView"
                                                   Source="{Binding Drivers}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Имя" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Surname}" Header="Фамилия" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Crew}" Header="Номер Экипажа" Width="*" CanUserSort="False"/>
-                            <DataGridTextColumn Binding="{Binding YearOfBirth}" Header="Дата рождения" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding WorkExperience}" Header="Стаж" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Category}" Header="Категория" Width="*" CanUserSort="False" />
-                            <DataGridTextColumn Binding="{Binding Class}" Header="Классность" Width="*" CanUserSort="False"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddDriver" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewDriver}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveDriver" Content="Удалить" Command="{Binding DeleteDriver}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditDriver" Content="Редактировать" Command="{Binding EditDriver}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
-                        <TextBox x:Name="TextSearchDriver" Text="{Binding SearchTextDriver}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="SearchDriver" Content="Поиск" Command="{Binding SearchDriver}" Width="75" Height="20" Margin="0, 0, 5, 0"/>
-                        <ComboBox x:Name="DriverSearchSelect" Width="125" Height="20" ItemsSource="{Binding DriverSearchList}" SelectedItem="{Binding DriverSearchSelect}"/>
-                    </StackPanel>
-                </Grid>
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Name}" Header="Имя" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Surname}" Header="Фамилия" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Crew}" Header="Номер Экипажа" Width="*" CanUserSort="False"/>
+                                <DataGridTextColumn Binding="{Binding YearOfBirth}" Header="Дата рождения" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding WorkExperience}" Header="Стаж" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Category}" Header="Категория" Width="*" CanUserSort="False" />
+                                <DataGridTextColumn Binding="{Binding Class}" Header="Классность" Width="*" CanUserSort="False"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddDriver" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewDriver}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveDriver" Content="Удалить" Command="{Binding DeleteDriver}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditDriver" Content="Редактировать" Command="{Binding EditDriver}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
+                            <TextBox x:Name="TextSearchDriver" Text="{Binding SearchTextDriver}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="SearchDriver" Content="Поиск" Command="{Binding SearchDriver}" Width="75" Height="20" Margin="0, 0, 5, 0"/>
+                            <ComboBox x:Name="DriverSearchSelect" Width="125" Height="20" ItemsSource="{Binding DriverSearchList}" SelectedItem="{Binding DriverSearchSelect}"/>
+                        </StackPanel>
+                    </Grid>
 
-            </TabItem>
+                </TabItem>
 
 
-            <TabItem Header="Автомобили">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
+                <TabItem Header="Автомобили" IsSelected="{Binding isAutomobileTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="AutomobilesGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Automobiles}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedAutomobile}" >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="AutomobilessView"
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="AutomobilesGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Automobiles}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedAutomobile}" >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="AutomobilessView"
                                                   Source="{Binding Automobiles}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Id}" Header="Номер" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding GosNumber}" Header="Гос. Номер" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Brand}" Header="Бренд" Width="*" CanUserSort="False"/>
-                            <DataGridTextColumn Binding="{Binding LoadCapacity}" Header="Грузоподъемность" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Purpose}" Header="Назначение" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding YearOfIssue}" Header="Год выпуска" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding YearOfRepair}" Header="Год ремонта" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Mileage}" Header="Пробег" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddAutomobile" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewAutomobile}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveAutomobile" Content="Удалить" Command="{Binding DeleteAutomobile}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditAutomobile" Content="Редактировать" Command="{Binding EditAutomobile}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
-                        <TextBox x:Name="TextSearchAutomobile" Text="{Binding SearchTextAutomobile}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="SearchAutomobile" Content="Поиск по бренду" Command="{Binding SearchAutomobile}" Width="100" Height="20" />
-                        
-                    </StackPanel>
-                </Grid>
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Id}" Header="Номер" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding GosNumber}" Header="Гос. Номер" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Brand}" Header="Бренд" Width="*" CanUserSort="False"/>
+                                <DataGridTextColumn Binding="{Binding LoadCapacity}" Header="Грузоподъемность" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Purpose}" Header="Назначение" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding YearOfIssue}" Header="Год выпуска" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding YearOfRepair}" Header="Год ремонта" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Mileage}" Header="Пробег" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddAutomobile" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewAutomobile}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveAutomobile" Content="Удалить" Command="{Binding DeleteAutomobile}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditAutomobile" Content="Редактировать" Command="{Binding EditAutomobile}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
+                            <TextBox x:Name="TextSearchAutomobile" Text="{Binding SearchTextAutomobile}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="SearchAutomobile" Content="Поиск по бренду" Command="{Binding SearchAutomobile}" Width="100" Height="20" />
 
-            </TabItem>
+                        </StackPanel>
+                    </Grid>
 
-            <TabItem Header="Бренды">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
+                </TabItem>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="BrandsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Brands}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedBrand}">
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="BanksView"
+                <TabItem Header="Бренды" IsSelected="{Binding isBrandTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="BrandsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Brands}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedBrand}">
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="BanksView"
                                                   Source="{Binding Brands}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddBrand" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewBrand}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveBrand" Content="Удалить" Command="{Binding DeleteBrand}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditBrand" Content="Редактировать" Command="{Binding EditBrand}" Width="100" Height="25" />
-                    </StackPanel>
-                </Grid>
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddBrand" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewBrand}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveBrand" Content="Удалить" Command="{Binding DeleteBrand}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditBrand" Content="Редактировать" Command="{Binding EditBrand}" Width="100" Height="25" />
+                        </StackPanel>
+                    </Grid>
 
-            </TabItem>
+                </TabItem>
 
-            <TabItem Header="Расчетные счета">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
+                <TabItem Header="Расчетные счета" IsSelected="{Binding isCheckTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="Checking_AccountsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Checking_Accounts}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedChecking_account}" >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="Checking_AccountsView"
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="Checking_AccountsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Checking_Accounts}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedChecking_account}" >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="Checking_AccountsView"
                                                   Source="{Binding Checking_Accounts}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Check}" Header="Номер" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Bank}" Header="Банк" Width="*" CanUserSort="False"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddCheck" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewChecking_Account}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveCheck" Content="Удалить" Command="{Binding DeleteChecking_account}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditCheck" Content="Редактировать" Command="{Binding EditChecking_Account}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
-                        <TextBox x:Name="TextSearchCheck" Text="{Binding SearchTextCheck}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="SearchCheck" Content="Поиск" Command="{Binding SearchCheck}" Width="75" Height="20" Margin="0, 0, 5, 0"/>
-                        <ComboBox x:Name="CheckSearchSelect" Width="125" Height="20" ItemsSource="{Binding CheckSearchList}" SelectedItem="{Binding CheckSearchSelect}"/>
-                    </StackPanel>
-                </Grid>
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Check}" Header="Номер" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Bank}" Header="Банк" Width="*" CanUserSort="False"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddCheck" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewChecking_Account}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveCheck" Content="Удалить" Command="{Binding DeleteChecking_account}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditCheck" Content="Редактировать" Command="{Binding EditChecking_Account}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
+                            <TextBox x:Name="TextSearchCheck" Text="{Binding SearchTextCheck}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="SearchCheck" Content="Поиск" Command="{Binding SearchCheck}" Width="75" Height="20" Margin="0, 0, 5, 0"/>
+                            <ComboBox x:Name="CheckSearchSelect" Width="125" Height="20" ItemsSource="{Binding CheckSearchList}" SelectedItem="{Binding CheckSearchSelect}"/>
+                        </StackPanel>
+                    </Grid>
 
-            </TabItem>
+                </TabItem>
 
 
-            <TabItem Header="Банки">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
+                <TabItem Header="Банки" IsSelected="{Binding isBankTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="BanksGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Banks}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedBank}" >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="BanksView"
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="BanksGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Banks}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedBank}" >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="BanksView"
                                                   Source="{Binding Banks}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddBank" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewBank}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveBank" Content="Удалить" Command="{Binding DeleteBank}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditBank" Content="Редактировать" Command="{Binding EditBank}" Width="100" Height="25" />
-                    </StackPanel>
-                </Grid>
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddBank" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewBank}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveBank" Content="Удалить" Command="{Binding DeleteBank}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditBank" Content="Редактировать" Command="{Binding EditBank}" Width="100" Height="25" />
+                        </StackPanel>
+                    </Grid>
 
-            </TabItem>
+                </TabItem>
 
-            <TabItem Header="Единицы измерения">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
+                <TabItem Header="Единицы измерения" IsSelected="{Binding isUnitTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="UnitsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Units}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedUnit}" >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="UnitsView"
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="UnitsGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Units}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedUnit}" >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="UnitsView"
                                                   Source="{Binding Units}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddUnit" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewUnit}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveUnit" Content="Удалить" Command="{Binding DeleteUnit}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditUnit" Content="Редактировать" Command="{Binding EditUnit}" Width="100" Height="25" />
-                    </StackPanel>
-                </Grid>
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddUnit" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewUnit}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveUnit" Content="Удалить" Command="{Binding DeleteUnit}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditUnit" Content="Редактировать" Command="{Binding EditUnit}" Width="100" Height="25" />
+                        </StackPanel>
+                    </Grid>
 
-            </TabItem>
+                </TabItem>
 
-            <TabItem Header="Грузы">
-                <Grid Margin="12">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0,80*"></RowDefinition>
-                        <RowDefinition Height="0,40"></RowDefinition>
+                <TabItem Header="Грузы" IsSelected="{Binding isCargoTabOpen}">
+                    <Grid Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0,80*"></RowDefinition>
+                            <RowDefinition Height="0,40"></RowDefinition>
 
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="CargosGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Cargos}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedCargo}"  >
-                        <DataGrid.Resources>
-                            <CollectionViewSource x:Key="CargosView"
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="CargosGrid" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Cargos}" VerticalScrollBarVisibility="Visible" SelectedItem="{Binding SelectedCargo}"  >
+                            <DataGrid.Resources>
+                                <CollectionViewSource x:Key="CargosView"
                                                   Source="{Binding Cargos}">
 
-                            </CollectionViewSource>
-                        </DataGrid.Resources>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Id}" Header="Номер груза" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Amount}" Header="Количество" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Weight}" Header="Вес" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Unit}" Header="Единицы измерения" Width="*" CanUserSort="False"/>
-                            <DataGridTextColumn Binding="{Binding InsuranceValue}" Header="Страховая стоимость" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Order}" Header="Заказ" Width="*" CanUserSort="False"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Grid.Row="1" Orientation="Horizontal">
-                        <Button x:Name="AddCargo" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewCargo}" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="RemoveCargo" Content="Удалить" Command="{Binding DeleteCargo}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="EditCargo" Content="Редактировать" Command="{Binding EditCargo}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
-                        <TextBox x:Name="TextSearchCargo" Text="{Binding SearchTextCargo}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
-                        <Button x:Name="SearchCargo" Content="Поиск" Command="{Binding SearchCargo}" Width="75" Height="20"  Margin="0, 0, 5, 0"/>
-                        <ComboBox x:Name="CheckSearchCargo" Width="125" Height="20" ItemsSource="{Binding CargoSearchList}" SelectedItem="{Binding CargoSearchSelect}"/>
-                    </StackPanel>
-                </Grid>
-
-            </TabItem>
-
-           
-
-            <TabItem Header="User">
-                <DockPanel Margin="3">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="10"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-
-                        </Grid.RowDefinitions>
-
-                        <Label Grid.Row="0" Content="Смена пароля" HorizontalContentAlignment="Center"></Label>
-                        <TextBlock Grid.Row="1" Text="Введите старый пароль:"/>
-                        <PasswordBox x:Name="OldPassword" Grid.Row="1" Margin="10,0,0,0" Width="200"/>
-
-                        <TextBlock Grid.Row="2" Text="Введите новый пароль:"/>
-                        <PasswordBox x:Name="NewPassword" Grid.Row="2" Margin="10,0,0,0" Width="200" />
-
-                        <TextBlock Grid.Row="3" Text="Повторите новый пароль:"/>
-                        <PasswordBox x:Name="PassRepeat" Grid.Row="3" Margin="10,0,0,0" Width="200" />
-
-                        <Button Grid.Row="5" Content="Смена пароля" Width="100" Height="25" Click="ChangePassword" />
-
+                                </CollectionViewSource>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Id}" Header="Номер груза" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Name}" Header="Название" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Amount}" Header="Количество" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Weight}" Header="Вес" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Unit}" Header="Единицы измерения" Width="*" CanUserSort="False"/>
+                                <DataGridTextColumn Binding="{Binding InsuranceValue}" Header="Страховая стоимость" Width="*"/>
+                                <DataGridTextColumn Binding="{Binding Order}" Header="Заказ" Width="*" CanUserSort="False"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Button x:Name="AddCargo" Content="Добавить" Width="100" Height="25" Command="{Binding AddNewCargo}" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="RemoveCargo" Content="Удалить" Command="{Binding DeleteCargo}" Width="100" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="EditCargo" Content="Редактировать" Command="{Binding EditCargo}" Width="100" Height="25" Margin="0, 0, 10, 0"/>
+                            <TextBox x:Name="TextSearchCargo" Text="{Binding SearchTextCargo}" Width="150" Height="25" Margin="0, 0, 5, 0"/>
+                            <Button x:Name="SearchCargo" Content="Поиск" Command="{Binding SearchCargo}" Width="75" Height="20"  Margin="0, 0, 5, 0"/>
+                            <ComboBox x:Name="CheckSearchCargo" Width="125" Height="20" ItemsSource="{Binding CargoSearchList}" SelectedItem="{Binding CargoSearchSelect}"/>
+                        </StackPanel>
                     </Grid>
-                </DockPanel>
 
-            </TabItem>
-
-            <TabItem Header="Справка">
-                <DockPanel Margin="3">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            <RowDefinition Height="20"/>
-                            
-
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Grid.Row="1" Text="Добро пожаловать в приложение для управления грузовыми перевозками!" FontFamily="Times New Roman"></TextBlock>
-
-                        <Label Grid.Row="2" Content="О программе" FontSize="16" FontWeight="Bold" FontFamily="Times New Roman" HorizontalContentAlignment="Center" ></Label>
-                        <TextBlock Grid.Row="3" Text="Это приложение является частью информационной системы, предназначенной для эффективного управления грузовыми перевозками. Оно предоставляет удобный интерфейс для" FontFamily="Times New Roman" ></TextBlock>
-                        <TextBlock Grid.Row="4" Text="работы с базой данных, которая содержит информацию о грузах, транспорте, маршрутах и других связанных объектах в виде таблиц." FontFamily="Times New Roman"></TextBlock>
-
-                        <Label Grid.Row="5" Content="Возможности приложения" FontSize="16" FontWeight="Bold" FontFamily="Times New Roman" HorizontalContentAlignment="Center"></Label>
-                        <TextBlock Grid.Row="6" Text="1. Вы можете просматривать информацию в виде таблиц, легко добавлять, редактировать и удалять объекты. Всё настроено для быстрого поиска нужных данных." FontFamily="Times New Roman"></TextBlock>
-                        <TextBlock Grid.Row="7" Text="2. Добавление и редактирование новых объектов: Просто заполните соответствующую форму с необходимой информацией и сохраните новый объект." FontFamily="Times New Roman"></TextBlock>
-                        <TextBlock Grid.Row="8" Text="Некоторые данные будут требовать определённый ввод, такие как номер телефона, пасспорт и др... При неправильном вводе должна выйти ошибка-подсказка." Foreground="Red" FontFamily="Times New Roman"></TextBlock>
-                        <TextBlock Grid.Row="9" Text="3. Поиск данных: требуется выбрать критерий, к примеру, по номеру заказа, и тогда, при вводе нужного числа и нажатия кнопки поиск, отобразится изменённая таблица." FontFamily="Times New Roman"></TextBlock>
-                        <TextBlock Grid.Row="10" Text="4. Импорт: можно импортировать заказы, для этого требуется в директорий проекта добавить файл с названием: new_file, для успешного импорта колонки должны соответствовать." FontFamily="Times New Roman"></TextBlock>
-                        <TextBlock Grid.Row="11" Text="5. Экспорт: при нажатии на клавишу, находится она именно в заказах, происходит создание документа со всеми таблицами, документ сохраняется в Загрузках." FontFamily="Times New Roman"></TextBlock>
-                        <TextBlock Grid.Row="12" Text="6. Смена пароля пользователя: на вкладке User, просто введите свой старый и новый пароли и нажмите кнопочку - Смена пароля." FontFamily="Times New Roman"></TextBlock>
-                    </Grid>
-                </DockPanel>
-
-            </TabItem>
+                </TabItem>
 
 
 
+                <TabItem Header="User" IsSelected="{Binding isChangePasswordTabOpen}">
+                    <DockPanel Margin="3">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Row="0" Content="Смена пароля" HorizontalContentAlignment="Center"></Label>
+                            <TextBlock Grid.Row="1" Text="Введите старый пароль:"/>
+                            <PasswordBox x:Name="OldPassword" Grid.Row="1" Margin="10,0,0,0" Width="200"/>
+
+                            <TextBlock Grid.Row="2" Text="Введите новый пароль:"/>
+                            <PasswordBox x:Name="NewPassword" Grid.Row="2" Margin="10,0,0,0" Width="200" />
+
+                            <TextBlock Grid.Row="3" Text="Повторите новый пароль:"/>
+                            <PasswordBox x:Name="PassRepeat" Grid.Row="3" Margin="10,0,0,0" Width="200" />
+
+                            <Button Grid.Row="5" Content="Смена пароля" Width="100" Height="25" Click="ChangePassword" />
+
+                        </Grid>
+                    </DockPanel>
+
+                </TabItem>
+
+                <TabItem Header="Справка" IsSelected="{Binding isReferenceTabOpen}">
+                    <DockPanel Margin="3">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition Height="20"/>
 
 
-        </TabControl>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="1" Text="Добро пожаловать в приложение для управления грузовыми перевозками!" FontFamily="Times New Roman"></TextBlock>
+
+                            <Label Grid.Row="2" Content="О программе" FontSize="16" FontWeight="Bold" FontFamily="Times New Roman" HorizontalContentAlignment="Center" ></Label>
+                            <TextBlock Grid.Row="3" Text="Это приложение является частью информационной системы, предназначенной для эффективного управления грузовыми перевозками. Оно предоставляет удобный интерфейс для" FontFamily="Times New Roman" ></TextBlock>
+                            <TextBlock Grid.Row="4" Text="работы с базой данных, которая содержит информацию о грузах, транспорте, маршрутах и других связанных объектах в виде таблиц." FontFamily="Times New Roman"></TextBlock>
+
+                            <Label Grid.Row="5" Content="Возможности приложения" FontSize="16" FontWeight="Bold" FontFamily="Times New Roman" HorizontalContentAlignment="Center"></Label>
+                            <TextBlock Grid.Row="6" Text="1. Вы можете просматривать информацию в виде таблиц, легко добавлять, редактировать и удалять объекты. Всё настроено для быстрого поиска нужных данных." FontFamily="Times New Roman"></TextBlock>
+                            <TextBlock Grid.Row="7" Text="2. Добавление и редактирование новых объектов: Просто заполните соответствующую форму с необходимой информацией и сохраните новый объект." FontFamily="Times New Roman"></TextBlock>
+                            <TextBlock Grid.Row="8" Text="Некоторые данные будут требовать определённый ввод, такие как номер телефона, пасспорт и др... При неправильном вводе должна выйти ошибка-подсказка." Foreground="Red" FontFamily="Times New Roman"></TextBlock>
+                            <TextBlock Grid.Row="9" Text="3. Поиск данных: требуется выбрать критерий, к примеру, по номеру заказа, и тогда, при вводе нужного числа и нажатия кнопки поиск, отобразится изменённая таблица." FontFamily="Times New Roman"></TextBlock>
+                            <TextBlock Grid.Row="10" Text="4. Импорт: можно импортировать заказы, для этого требуется в директорий проекта добавить файл с названием: new_file, для успешного импорта колонки должны соответствовать." FontFamily="Times New Roman"></TextBlock>
+                            <TextBlock Grid.Row="11" Text="5. Экспорт: при нажатии на клавишу, находится она именно в заказах, происходит создание документа со всеми таблицами, документ сохраняется в Загрузках." FontFamily="Times New Roman"></TextBlock>
+                            <TextBlock Grid.Row="12" Text="6. Смена пароля пользователя: на вкладке User, просто введите свой старый и новый пароли и нажмите кнопочку - Смена пароля." FontFamily="Times New Roman"></TextBlock>
+                        </Grid>
+                    </DockPanel>
+
+                </TabItem>
+
+
+
+
+
+            </TabControl>
+        </DockPanel>
     </Grid>
 </Window>

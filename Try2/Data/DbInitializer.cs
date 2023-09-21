@@ -35,6 +35,7 @@ namespace Try2.Data
 
             if (await _db.Users.AnyAsync()) return;
 
+            await InitializeStructures();
             await InitializeRights();
             await InitializeUsers();
             await InitializeBanks();
@@ -52,6 +53,52 @@ namespace Try2.Data
             await InitializeCargos();
 
             _logger.LogInformation("Инициализация БД выполнена за {0} с", timer.Elapsed.TotalSeconds);
+        }
+
+        private Structure[] Structures;
+        private Structure[] catalogs;
+
+        private async Task InitializeStructures()
+        {
+            var timer = Stopwatch.StartNew();
+            _logger.LogInformation("Инициализация категорий измерения...");
+
+            
+
+            Structures = new Structure[] {
+
+                new Structure { Name = "Разное", number = 1},
+                new Structure { Name = "Сотрудники", number = 2},
+                new Structure { Name = "Изменения", number = 3},
+                new Structure { Name = "Справочники", number = 4 },
+                new Structure { Name = "Смена пароля", number = 5, function = "ChangePassword"},
+                new Structure { Name = "Справка", number = 6, function = "catalogReference"}
+            };
+
+            catalogs = new Structure[]
+            {
+                new Structure { Name = "Заказы", number = 0, function = "catalogOrder", ParentStructure = Structures[3]},
+                new Structure { Name = "Физические лица", function = "catalogPhys", number = 0, ParentStructure = Structures[3]},
+                new Structure { Name = "Юридические лица", number = 0, function = "catalogLegal", ParentStructure = Structures[3]},
+                new Structure { Name = "Рейсы", number = 0, function = "catalogFlight", ParentStructure = Structures[3]},
+                new Structure { Name = "Экипажи", number = 0, function = "catalogCrew", ParentStructure = Structures[3]},
+                new Structure { Name = "Водители", number = 0, function = "catalogDriver", ParentStructure = Structures[3]},
+                new Structure { Name = "Автомобили", number = 0, function = "catalogAutomobile", ParentStructure = Structures[3]},
+                new Structure { Name = "Бренды", number = 0, function = "catalogBrand", ParentStructure = Structures[3]},
+                new Structure { Name = "Рассчетные счета", number = 0, function = "catalogCheck", ParentStructure = Structures[3]},
+                new Structure { Name = "Банки", number = 0, function = "catalogBank", ParentStructure = Structures[3]},
+                new Structure { Name = "Единицы измерения", number = 0, function = "catalogUnit", ParentStructure = Structures[3]},
+                new Structure { Name = "Грузы", number = 0, function = "catalogCargo", ParentStructure = Structures[3]},
+            };
+
+
+            //Structures.AddItems(catalogs);
+
+            await _db.Structures.AddRangeAsync(Structures);
+            await _db.Structures.AddRangeAsync(catalogs);
+            await _db.SaveChangesAsync();
+
+            _logger.LogInformation("Инициализация структур выполнена за {0} мс", timer.ElapsedMilliseconds);
         }
 
         private Right[] Rights;
@@ -105,6 +152,10 @@ namespace Try2.Data
 
             _logger.LogInformation("Инициализация Пользователей выполнена за {0} мс", timer.ElapsedMilliseconds);
         }
+
+
+
+
 
         private const int _BankCount = 10;
 

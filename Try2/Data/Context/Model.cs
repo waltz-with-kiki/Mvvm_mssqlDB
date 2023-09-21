@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Try2.Interfaces;
 
 namespace Try2.Context
@@ -28,6 +29,28 @@ namespace Try2.Context
     {
         public string? Surname { get; set; }
     }
+
+    public class Structure : NamedEntity
+    {
+
+        public Structure? ParentStructure { get; set;}
+
+        //public ICollection<Structure> Structures { get; set; }
+
+        [NotMapped]
+        public List<Structure> Catalogs { get; set; }
+
+        public string? DLLName { get; set; }
+
+       [NotMapped]
+       public ICommand Command { get; set; }
+
+       public string? function { get; set; }
+
+        public int number { get; set; }
+    }
+
+
 
     public class Right : NamedEntity
     {
@@ -347,6 +370,7 @@ namespace Try2.Context
 
         public DbSet<Cargo> Cargos { get; set; }
 
+        public DbSet<Structure> Structures { get; set; }
 
 
         /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -13,6 +13,7 @@ namespace Try2.Data
     {
 
         public static IServiceCollection AddRepositoryInDb(this IServiceCollection services) => services
+            .AddTransient<IRepository<Structure>, DbRepository<Structure>>()
             .AddTransient<IRepository<User>, UsersRepository>()
             .AddTransient<IRepository<Right>, DbRepository<Right>>()
             .AddTransient<IRepository<Bank>, DbRepository<Bank>>()

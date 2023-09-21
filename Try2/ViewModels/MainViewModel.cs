@@ -75,6 +75,7 @@ namespace Try2.ViewModels
         private readonly IRepository<Flight> _FlightsRep;
         private readonly IRepository<Unit> _UnitsRep;
         private readonly IRepository<Cargo> _CargosRep;
+        private readonly IRepository<Structure> _StructuresRep;
 
         private readonly IUserDialog _UserDialog;
 
@@ -95,6 +96,47 @@ namespace Try2.ViewModels
                   return _ClientsRep.Items.Where(c => c.IsPhysical == false).ToList();
               } }
         */
+
+
+        private bool _isOrderTabOpen = false;
+        public bool isOrderTabOpen
+        {
+            get { return _isOrderTabOpen; }
+            set => Set(ref _isOrderTabOpen, value);
+        }
+
+        private bool _isFlightTabOpen = false;
+        public bool isFlightTabOpen
+        {
+            get { return _isFlightTabOpen; }
+            set => Set(ref _isFlightTabOpen, value);
+        }
+
+
+        public ICollection<Structure> GetCatalogs(Structure currentstruct)
+        {
+            return _StructuresRep.Items.Where(x => x.ParentStructure == currentstruct).ToList();
+        }
+
+        public List<Structure> PointsStruct
+        {
+            get
+            {
+                return _StructuresRep.Items.ToList();
+            }
+
+        }
+
+
+        public List<Structure> Structures
+        {
+            get
+            {
+                return _StructuresRep.Items.Where(x => x.number != 0).OrderBy(x => x.number).ToList();
+            }
+        }
+
+
 
         private Order _SelectedOrder;
 
@@ -506,6 +548,11 @@ namespace Try2.ViewModels
             //Orders = new ObservableCollection<Order>(_Orders.ToArray());
             //Orders = _OrdersRep.Items.ToArray().ToObservableCollection();\
 
+
+
+
+            LoadStructures();
+
             await LoadBanks();
 
             await LoadChecking_Accounts();
@@ -534,6 +581,73 @@ namespace Try2.ViewModels
 
             isDataLoaded = true;
             // Orders = await new ObservableCollection<Order>(await _OrdersRep.Items.ToArrayAsync());
+        }
+
+        private void LoadStructures()
+        {
+            foreach (var item in Structures)
+            {
+                item.Catalogs = GetCatalogs(item).ToList();
+
+            }
+
+            List<Structure> Catalogs = new List<Structure>();
+
+            Catalogs = PointsStruct.Where(x => x.number == 0 || x.Catalogs.Count() == 0).ToList();
+
+
+
+            foreach (var item in Catalogs)
+            {
+                switch (item.function)
+                {
+                    case "catalogOrder":
+                        item.Command = catalogOrder;
+                        break;
+                    case "catalogPhys":
+                        item.Command = catalogPhys;
+                        break;
+                    case "catalogLegal":
+                        item.Command = catalogLegal;
+                        break;
+                    case "catalogCrew":
+                        item.Command = catalogCrew;
+                        break;
+                    case "catalogDriver":
+                        item.Command = catalogDriver;
+                        break;
+                    case "catalogAutomobile":
+                        item.Command = catalogAutomobile;
+                        break;
+                    case "catalogBrand":
+                        item.Command = catalogBrand;
+                        break;
+                    case "catalogCheck":
+                        item.Command = catalogCheck;
+                        break;
+                    case "catalogBank":
+                        item.Command = catalogBank;
+                        break;
+                    case "catalogUnit":
+                        item.Command = catalogUnit;
+                        break;
+                    case "catalogCargo":
+                        item.Command = catalogCargo;
+                        break;
+                    case "catalogFlight":
+                        item.Command = catalogFlight;
+                        break;
+                    case "catalogReference":
+                        item.Command = catalogReference;
+                        break;
+                    case "ChangePassword":
+                        item.Command = ChangePassword;
+                        break;
+                        
+                }
+            }
+
+
         }
 
         private async Task LoadOrders() {
@@ -2072,6 +2186,286 @@ namespace Try2.ViewModels
 
         }
 
+        private ICommand _catalogOrder;
+
+        public ICommand catalogOrder => _catalogOrder
+           ??= new RelayCommand(OncatalogOrderCommandExecuted, CancatalogOrderCommandExecute);
+
+        private bool CancatalogOrderCommandExecute(object arg) => true;
+
+        private void OncatalogOrderCommandExecuted(object obj)
+        {
+            isOrderTabOpen = true;
+        }
+
+
+        private bool _isPhysTabOpen = false;
+        public bool isPhysTabOpen
+        {
+            get { return _isPhysTabOpen; }
+            set => Set(ref _isPhysTabOpen, value);
+        }
+
+        private ICommand _catalogPhys;
+
+        public ICommand catalogPhys => _catalogPhys
+           ??= new RelayCommand(OncatalogPhysCommandExecuted, CancatalogPhysCommandExecute);
+
+        private bool CancatalogPhysCommandExecute(object arg) => true;
+
+        private void OncatalogPhysCommandExecuted(object obj)
+        {
+            isPhysTabOpen = true;
+        }
+
+        private bool _isLegalTabOpen = false;
+        public bool isLegalTabOpen
+        {
+            get { return _isLegalTabOpen; }
+            set => Set(ref _isLegalTabOpen, value);
+        }
+
+        private ICommand _catalogLegal;
+
+        public ICommand catalogLegal => _catalogLegal
+           ??= new RelayCommand(OncatalogLegalCommandExecuted, CancatalogLegalCommandExecute);
+
+        private bool CancatalogLegalCommandExecute(object arg) => true;
+
+        private void OncatalogLegalCommandExecuted(object obj)
+        {
+            isLegalTabOpen = true;
+        }
+
+
+
+        private bool _isCrewTabOpen = false;
+        public bool isCrewTabOpen
+        {
+            get { return _isCrewTabOpen; }
+            set => Set(ref _isCrewTabOpen, value);
+        }
+
+        private ICommand _catalogCrew;
+
+        public ICommand catalogCrew => _catalogCrew
+           ??= new RelayCommand(OncatalogCrewCommandExecuted, CancatalogCrewCommandExecute);
+
+        private bool CancatalogCrewCommandExecute(object arg) => true;
+
+        private void OncatalogCrewCommandExecuted(object obj)
+        {
+            isCrewTabOpen = true;
+        }
+
+
+
+
+        private bool _isDriverTabOpen = false;
+        public bool isDriverTabOpen
+        {
+            get { return _isDriverTabOpen; }
+            set => Set(ref _isDriverTabOpen, value);
+        }
+
+        private ICommand _catalogDriver;
+
+        public ICommand catalogDriver => _catalogDriver
+           ??= new RelayCommand(OncatalogDriverCommandExecuted, CancatalogDriverCommandExecute);
+
+        private bool CancatalogDriverCommandExecute(object arg) => true;
+
+        private void OncatalogDriverCommandExecuted(object obj)
+        {
+            isDriverTabOpen = true;
+        }
+
+
+
+        private bool _isAutomobileTabOpen = false;
+        public bool isAutomobileTabOpen
+        {
+            get { return _isAutomobileTabOpen; }
+            set => Set(ref _isAutomobileTabOpen, value);
+        }
+
+        private ICommand _catalogAutomobile;
+
+        public ICommand catalogAutomobile => _catalogAutomobile
+           ??= new RelayCommand(OncatalogAutomobileCommandExecuted, CancatalogAutomobileCommandExecute);
+
+        private bool CancatalogAutomobileCommandExecute(object arg) => true;
+
+        private void OncatalogAutomobileCommandExecuted(object obj)
+        {
+            isAutomobileTabOpen = true;
+        }
+
+
+        private bool _isBrandTabOpen = false;
+        public bool isBrandTabOpen
+        {
+            get { return _isBrandTabOpen; }
+            set => Set(ref _isBrandTabOpen, value);
+        }
+
+        private ICommand _catalogBrand;
+
+        public ICommand catalogBrand => _catalogBrand
+           ??= new RelayCommand(OncatalogBrandCommandExecuted, CancatalogBrandCommandExecute);
+
+        private bool CancatalogBrandCommandExecute(object arg) => true;
+
+        private void OncatalogBrandCommandExecuted(object obj)
+        {
+            isBrandTabOpen = true;
+        }
+
+
+        private bool _isCheckTabOpen = false;
+        public bool isCheckTabOpen
+        {
+            get { return _isCheckTabOpen; }
+            set => Set(ref _isCheckTabOpen, value);
+        }
+
+        private ICommand _catalogCheck;
+
+        public ICommand catalogCheck => _catalogCheck
+           ??= new RelayCommand(OncatalogCheckCommandExecuted, CancatalogCheckCommandExecute);
+
+        private bool CancatalogCheckCommandExecute(object arg) => true;
+
+        private void OncatalogCheckCommandExecuted(object obj)
+        {
+            isCheckTabOpen = true;
+        }
+
+
+
+        private bool _isBankTabOpen = false;
+        public bool isBankTabOpen
+        {
+            get { return _isBankTabOpen; }
+            set => Set(ref _isBankTabOpen, value);
+        }
+
+        private ICommand _catalogBank;
+
+        public ICommand catalogBank => _catalogBank
+           ??= new RelayCommand(OncatalogBankCommandExecuted, CancatalogBankCommandExecute);
+
+        private bool CancatalogBankCommandExecute(object arg) => true;
+
+        private void OncatalogBankCommandExecuted(object obj)
+        {
+            isBankTabOpen = true;
+        }
+
+
+        private bool _isUnitTabOpen = false;
+        public bool isUnitTabOpen
+        {
+            get { return _isUnitTabOpen; }
+            set => Set(ref _isUnitTabOpen, value);
+        }
+
+        private ICommand _catalogUnit;
+
+        public ICommand catalogUnit => _catalogUnit
+           ??= new RelayCommand(OncatalogUnitCommandExecuted, CancatalogUnitCommandExecute);
+
+        private bool CancatalogUnitCommandExecute(object arg) => true;
+
+        private void OncatalogUnitCommandExecuted(object obj)
+        {
+            isUnitTabOpen = true;
+        }
+
+
+        private bool _isCargoTabOpen = false;
+        public bool isCargoTabOpen
+        {
+            get { return _isCargoTabOpen; }
+            set => Set(ref _isCargoTabOpen, value);
+        }
+
+        private ICommand _catalogCargo;
+
+        public ICommand catalogCargo => _catalogCargo
+           ??= new RelayCommand(OncatalogCargoCommandExecuted, CancatalogCargoCommandExecute);
+
+        private bool CancatalogCargoCommandExecute(object arg) => true;
+
+        private void OncatalogCargoCommandExecuted(object obj)
+        {
+            isCargoTabOpen = true;
+        }
+
+
+
+        private bool _isReferenceTabOpen = false;
+        public bool isReferenceTabOpen
+        {
+            get { return _isReferenceTabOpen; }
+            set => Set(ref _isReferenceTabOpen, value);
+        }
+
+        private ICommand _catalogReference;
+
+        public ICommand catalogReference => _catalogReference
+           ??= new RelayCommand(OncatalogReferenceCommandExecuted, CancatalogReferenceCommandExecute);
+
+        private bool CancatalogReferenceCommandExecute(object arg) => true;
+
+        private void OncatalogReferenceCommandExecuted(object obj)
+        {
+            isReferenceTabOpen = true;
+        }
+
+
+
+        private bool _isChangePasswordTabOpen = false;
+        public bool isChangePasswordTabOpen
+        {
+            get { return _isChangePasswordTabOpen; }
+            set => Set(ref _isChangePasswordTabOpen, value);
+        }
+
+        private ICommand _ChangePassword;
+
+        public ICommand ChangePassword => _ChangePassword
+           ??= new RelayCommand(OnChangePasswordCommandExecuted, CanChangePasswordCommandExecute);
+
+        private bool CanChangePasswordCommandExecute(object arg) => true;
+
+        private void OnChangePasswordCommandExecuted(object obj)
+        {
+            isChangePasswordTabOpen = true;
+        }
+
+
+
+
+
+
+
+        private ICommand _catalogFlight;
+
+        public ICommand catalogFlight => _catalogFlight
+           ??= new RelayCommand(OncatalogFlightCommandExecuted, CancatalogFlightCommandExecute);
+
+        private bool CancatalogFlightCommandExecute(object arg) => true;
+
+        private void OncatalogFlightCommandExecuted(object obj)
+        {
+            isFlightTabOpen = true;
+        }
+
+
+
+
+
 
 
 
@@ -2177,7 +2571,8 @@ namespace Try2.ViewModels
                              IRepository<Unit> Units,
                              IRepository<Client> Clients, 
                              IRepository<Order> Orders, 
-                             IUserDialog userDialog)
+                             IUserDialog userDialog,
+                             IRepository<Structure> structures)
         {
             _ClientsRep = Clients;
             _OrdersRep = Orders;
@@ -2191,6 +2586,7 @@ namespace Try2.ViewModels
             _UnitsRep = Units;
             _CargosRep = Cargos;
             _UserDialog = userDialog;
+            _StructuresRep = structures;
         }
 
 

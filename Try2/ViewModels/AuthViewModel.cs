@@ -29,6 +29,7 @@ namespace Try2.ViewModels
         private bool _LoginEror = false;
         private readonly IRepository<User> _UsersRepository;
         private readonly IRepository<Right> _RightsRepository;
+        private readonly IRepository<Structure> _StructuresRepository;
 
         private string _ColorLabel;
 
@@ -199,10 +200,11 @@ namespace Try2.ViewModels
 
         
 
-        public AuthViewModel(IRepository<Right> Rights, IRepository<User> Users)
+        public AuthViewModel(IRepository<Right> Rights, IRepository<User> Users, IRepository<Structure> structures)
         {
             _RightsRepository = Rights;
             _UsersRepository = Users;
+            _StructuresRepository = structures;
             _loginCommand = new RelayCommand(Login, CanLogin);
         }
 
