@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -15,9 +16,9 @@ namespace Try2.Migrations
                 name: "Banks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,9 +29,9 @@ namespace Try2.Migrations
                 name: "Brands",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,9 +42,9 @@ namespace Try2.Migrations
                 name: "Crews",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,9 +55,9 @@ namespace Try2.Migrations
                 name: "DriverCategories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,9 +68,9 @@ namespace Try2.Migrations
                 name: "DriverClasses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,13 +81,13 @@ namespace Try2.Migrations
                 name: "Right",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    R = table.Column<bool>(type: "bit", nullable: false),
-                    W = table.Column<bool>(type: "bit", nullable: false),
-                    E = table.Column<bool>(type: "bit", nullable: false),
-                    D = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    R = table.Column<bool>(type: "boolean", nullable: false),
+                    W = table.Column<bool>(type: "boolean", nullable: false),
+                    E = table.Column<bool>(type: "boolean", nullable: false),
+                    D = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,13 +98,13 @@ namespace Try2.Migrations
                 name: "Structures",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentStructureId = table.Column<int>(type: "int", nullable: true),
-                    DLLName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    function = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    number = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ParentStructureId = table.Column<int>(type: "integer", nullable: true),
+                    DLLName = table.Column<string>(type: "text", nullable: true),
+                    function = table.Column<string>(type: "text", nullable: true),
+                    number = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,9 +120,9 @@ namespace Try2.Migrations
                 name: "Units",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -132,10 +133,10 @@ namespace Try2.Migrations
                 name: "Checking_Accounts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BankId = table.Column<int>(type: "int", nullable: true),
-                    Check = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BankId = table.Column<int>(type: "integer", nullable: true),
+                    Check = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -151,16 +152,16 @@ namespace Try2.Migrations
                 name: "Automobiles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GosNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BrandId = table.Column<int>(type: "int", nullable: true),
-                    LoadCapacity = table.Column<int>(type: "int", nullable: false),
-                    Purpose = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    YearOfIssue = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    YearOfRepair = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Mileage = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    GosNumber = table.Column<string>(type: "text", nullable: true),
+                    BrandId = table.Column<int>(type: "integer", nullable: true),
+                    LoadCapacity = table.Column<int>(type: "integer", nullable: false),
+                    Purpose = table.Column<string>(type: "text", nullable: true),
+                    YearOfIssue = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    YearOfRepair = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Mileage = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,15 +177,15 @@ namespace Try2.Migrations
                 name: "Drivers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CrewId = table.Column<int>(type: "int", nullable: true),
-                    YearOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    WorkExperience = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: true),
-                    ClassId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CrewId = table.Column<int>(type: "integer", nullable: true),
+                    YearOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    WorkExperience = table.Column<string>(type: "text", nullable: true),
+                    CategoryId = table.Column<int>(type: "integer", nullable: true),
+                    ClassId = table.Column<int>(type: "integer", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Surname = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -210,12 +211,12 @@ namespace Try2.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RightId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Password = table.Column<string>(type: "text", nullable: true),
+                    RightId = table.Column<int>(type: "integer", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Surname = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -231,19 +232,19 @@ namespace Try2.Migrations
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsPhysical = table.Column<bool>(type: "bit", nullable: false),
-                    LegalPersonName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LegalAdress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Checking_AccountId = table.Column<int>(type: "int", nullable: true),
-                    Inn = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SeriesAndNumberPass = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataOfIssue = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IssuedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    IsPhysical = table.Column<bool>(type: "boolean", nullable: false),
+                    LegalPersonName = table.Column<string>(type: "text", nullable: true),
+                    LegalAdress = table.Column<string>(type: "text", nullable: true),
+                    Checking_AccountId = table.Column<int>(type: "integer", nullable: true),
+                    Inn = table.Column<string>(type: "text", nullable: true),
+                    SeriesAndNumberPass = table.Column<string>(type: "text", nullable: true),
+                    DataOfIssue = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IssuedBy = table.Column<string>(type: "text", nullable: true),
+                    Surname = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -259,11 +260,11 @@ namespace Try2.Migrations
                 name: "Flights",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ArrivalDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CrewId = table.Column<int>(type: "int", nullable: true),
-                    AutomobileId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ArrivalDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CrewId = table.Column<int>(type: "integer", nullable: true),
+                    AutomobileId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -284,15 +285,15 @@ namespace Try2.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderData = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ClientId = table.Column<int>(type: "int", nullable: true),
-                    LoadingAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UnloadingAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RouteLength = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OrderCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    FlightId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderData = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ClientId = table.Column<int>(type: "integer", nullable: true),
+                    LoadingAddress = table.Column<string>(type: "text", nullable: true),
+                    UnloadingAddress = table.Column<string>(type: "text", nullable: true),
+                    RouteLength = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    OrderCost = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    FlightId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -313,14 +314,14 @@ namespace Try2.Migrations
                 name: "Cargos",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UnitId = table.Column<int>(type: "int", nullable: true),
-                    Amount = table.Column<int>(type: "int", nullable: false),
-                    Weight = table.Column<int>(type: "int", nullable: false),
-                    InsuranceValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UnitId = table.Column<int>(type: "integer", nullable: true),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
+                    Weight = table.Column<int>(type: "integer", nullable: false),
+                    InsuranceValue = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    OrderId = table.Column<int>(type: "integer", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -336,8 +337,6 @@ namespace Try2.Migrations
                         principalTable: "Units",
                         principalColumn: "Id");
                 });
-
-            migrationBuilder.Sql("ALTER TABLE Users ALTER COLUMN Name VARCHAR(255) COLLATE SQL_Latin1_General_CP1_CS_AS");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Automobiles_BrandId",

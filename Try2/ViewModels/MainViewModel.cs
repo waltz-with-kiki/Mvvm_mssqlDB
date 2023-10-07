@@ -20,7 +20,9 @@ using Try2.Context;
 using Try2.Interfaces;
 using Try2.Services.Interfaces;
 using Excel = Microsoft.Office.Interop.Excel;
-
+using Microsoft.Office.Core;
+using Microsoft.Office.Interop.Word;
+using Task = System.Threading.Tasks.Task;
 
 namespace Try2.ViewModels
 {
@@ -643,7 +645,10 @@ namespace Try2.ViewModels
                     case "ChangePassword":
                         item.Command = ChangePassword;
                         break;
-                        
+                    case "DocWindow":
+                        item.Command = DocWindow;
+                        break;
+
                 }
             }
 
@@ -1897,9 +1902,11 @@ namespace Try2.ViewModels
 
         private void OnExcelExportCommandExecuted(object obj)
         {
+            if (FileName == null) { MessageBox.Show("Пустое название файла", "Ошибка"); return; }
             if (!_UserDialog.ConfirmWarning("Точно хотите экспортировать базу данных?", "Экпорт")) { return; }
+           
 
-            string fileName = "DbExport";
+            string fileName = FileName;
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", fileName);
 
             Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
@@ -2556,7 +2563,202 @@ namespace Try2.ViewModels
             }
         }
 
-        
+        #region Добавление окна экспорта
+
+        private bool _IsSecondGridVisible = false;
+
+        public bool IsSecondGridVisible { get
+            {
+                return _IsSecondGridVisible;
+            }
+            set => Set(ref _IsSecondGridVisible, value); }
+
+        private ICommand _DocWindow;
+
+        public ICommand DocWindow => _DocWindow
+            ??= new RelayCommand(OnDocWindowExecuted, CanDocWindowExecute);
+
+        private bool CanDocWindowExecute(object obj) => true;
+
+        private void OnDocWindowExecuted(object obj)
+        {
+            isDataLoaded = false;
+            IsSecondGridVisible = true;
+        }
+
+        private ICommand _BackGridFirst;
+
+        public ICommand BackGridFirst => _BackGridFirst
+            ??= new RelayCommand(OnBackGridFirstExecuted, CanBackGridFirstExecute);
+
+        private bool CanBackGridFirstExecute(object obj) => true;
+
+        private void OnBackGridFirstExecuted(object obj)
+        {
+            isDataLoaded = true;
+            IsSecondGridVisible = false;
+        }
+
+
+        #endregion
+
+
+        #region Экпорт Word
+
+
+        private string _FileName;
+
+        public string FileName
+        {
+            get => _FileName;
+            set => Set(ref _FileName, value);
+        }
+
+        private ICommand _WordExport;
+
+        public ICommand WordExport => _WordExport
+           ??= new RelayCommand(OnWordExportCommandExecuted, CanWordExportCommandExecute);
+
+        private bool CanWordExportCommandExecute(object arg) => true;
+
+        private void OnWordExportCommandExecuted(object obj)
+        {
+            if (FileName == null) { MessageBox.Show("Пустое название файла", "Ошибка"); return; }
+            if (!_UserDialog.ConfirmWarning("Точно хотите экспортировать базу данных?", "Экпорт")) { return; }
+
+            string fileName = FileName;
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", fileName);
+
+
+            Microsoft.Office.Interop.Word.Document wordApp = new Microsoft.Office.Interop.Word.Document();
+            if (wordApp == null)
+            {
+                MessageBox.Show("Word установлен неправильно!!");
+                return;
+            }
+
+            object start = 0, end = 0;
+
+            Microsoft.Office.Interop.Word.Range rng = wordApp.Range(ref start, ref end);
+
+            rng.InsertBefore("Таблица грузов");
+            rng.Font.Name = "Verdana";
+            rng.Font.Size = 16;
+            rng.InsertParagraphAfter();
+            rng.InsertParagraphAfter();
+            rng.SetRange(rng.End, rng.End);
+
+            object missing = System.Reflection.Missing.Value;
+
+            // Add the table.
+            rng.Tables.Add(wordApp.Paragraphs[2].Range, _CargosRep.Items.Count(), 7, ref missing, ref missing);
+
+
+            Microsoft.Office.Interop.Word.Table tblCargo = wordApp.Tables[1];
+            tblCargo.Range.Font.Size = 12;
+            tblCargo.Columns.DistributeWidth();
+
+            
+            
+            tblCargo.Cell(1, 1).Range.Text = "Номер груза";
+            tblCargo.Cell(1, 2).Range.Text = "Назначение";
+            tblCargo.Cell(1, 3).Range.Text = "Количесво";
+            tblCargo.Cell(1, 4).Range.Text = "Вес";
+            tblCargo.Cell(1, 5).Range.Text = "Единицы измерения";
+            tblCargo.Cell(1, 6).Range.Text = "Страховая стоимость";
+            tblCargo.Cell(1, 7).Range.Text = "Заказ";
+
+            int row = 2;
+
+            foreach (var item in _CargosRep.Items)
+            {
+                tblCargo.Cell(row, 1).Range.Text = item.Id.ToString();
+                tblCargo.Cell(row, 2).Range.Text = item.Name;
+                tblCargo.Cell(row, 3).Range.Text = item.Amount.ToString();
+                tblCargo.Cell(row, 4).Range.Text = item.Weight.ToString();
+                tblCargo.Cell(row, 5).Range.Text = item.Unit.ToString();
+                tblCargo.Cell(row, 6).Range.Text = item.InsuranceValue.ToString();
+                tblCargo.Cell(row, 7).Range.Text = item.Order.ToString();
+                row++;
+            }
+
+            tblCargo.Borders.Enable = 1; // Включение границ
+
+            // Установка стиля границ
+            tblCargo.Borders.InsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
+            tblCargo.Borders.OutsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
+
+
+            Microsoft.Office.Interop.Word.Range rng2 = wordApp.Range(ref start, ref end);
+
+            rng2.InsertBefore("Таблица банков");
+            rng2.Font.Name = "Verdana";
+            rng2.Font.Size = 16;
+            rng2.InsertParagraphAfter();
+            rng2.InsertParagraphAfter();
+            rng2.SetRange(rng2.End, rng2.End);
+
+            // Вставка заголовка "Следующая таблица"
+            rng2.InsertParagraphAfter();
+            rng2.InsertParagraphAfter();
+            rng2.InsertAfter("Следующая таблица");
+            rng2.InsertParagraphAfter();
+            rng2.InsertParagraphAfter();
+
+            // Вставка второй таблицы
+            rng2.Tables.Add(wordApp.Paragraphs[2].Range, _BanksRep.Items.Count(), 2, ref missing, ref missing);
+
+            
+
+            // Форматирование второй таблицы и применение стиля
+            Microsoft.Office.Interop.Word.Table tbl2 = wordApp.Tables[1];
+            tbl2.Range.Font.Size = 12;
+            tbl2.Columns.DistributeWidth();
+
+            // Вставка значений в ячейки второй таблицы
+            
+            tbl2.Cell(1, 1).Range.Text = "Id";
+            tbl2.Cell(1, 2).Range.Text = "Название";
+
+            row = 2;
+
+            foreach (var item in _BanksRep.Items)
+            {
+                tbl2.Cell(row, 1).Range.Text = item.Id.ToString();
+                tbl2.Cell(row, 2).Range.Text = item.Name;
+
+                row++;
+            }
+
+            tbl2.Borders.Enable = 1; // Включение границ
+
+            // Установка стиля границ
+            tbl2.Borders.InsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
+            tbl2.Borders.OutsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
+
+
+            Microsoft.Office.Interop.Word.Range rng3 = wordApp.Range(ref start, ref end);
+
+            // Вставка заголовка "Следующая таблица"
+            rng3.InsertParagraphAfter();
+            rng3.InsertParagraphAfter();
+            rng3.InsertAfter("Следующая таблица");
+            rng3.InsertParagraphAfter();
+            rng3.InsertParagraphAfter();
+
+            // Вставка второй таблицы
+           
+
+
+
+            wordApp.SaveAs(filePath);
+            wordApp.Close();
+
+             //wordApp.Quit();
+            MessageBox.Show("Файл word был создан, вы можете найти его в загрузках");
+
+        }
+        #endregion
 
 
 

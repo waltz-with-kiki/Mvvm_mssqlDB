@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -329,17 +330,17 @@ namespace Try2.Context
         //private readonly string connectionString;
 
 
-        public UsersContext() :base()
+        public UsersContext() : base()
         {
 
         }
 
         public UsersContext(DbContextOptions options, IConfiguration configuration) : base(options)
         {
-            
+
         }
 
-     
+
         public DbSet<Right> Right { get; set; }
 
         public DbSet<User> Users { get; set; }
@@ -362,7 +363,7 @@ namespace Try2.Context
 
         public DbSet<Driver> Drivers { get; set; }
 
-        public DbSet<Flight> Flights { get; set; } 
+        public DbSet<Flight> Flights { get; set; }
 
         public DbSet<Order> Orders { get; set; }
 
@@ -378,6 +379,28 @@ namespace Try2.Context
              optionsBuilder.UseSqlServer(connectionString);
          }*/
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
+
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Properties<DateTime>().HaveConversion<UtcValueConverter>();
+            configurationBuilder.Properties<DateTime?>().HaveConversion<UtcValueConverter>();
+            base.ConfigureConventions(configurationBuilder);
+        }
+
+        private class UtcValueConverter : ValueConverter<DateTime, DateTime>
+        {
+            public UtcValueConverter()
+                : base(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc))
+            {
+            }
+
+
+        }
     }
 
 

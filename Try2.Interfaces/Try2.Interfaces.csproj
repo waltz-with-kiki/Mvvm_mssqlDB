@@ -4,4 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="WiX.Toolset" Version="3.9.1208" />
+  </ItemGroup>
+
 </Project>

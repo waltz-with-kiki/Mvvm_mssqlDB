@@ -24,6 +24,10 @@ namespace Try2.Data
                     case "MSSQL":
                         opt.UseSqlServer(Configuration.GetConnectionString(type));
                         break;
+
+                    case "POSTGRESQL":
+                        opt.UseNpgsql(Configuration.GetConnectionString(type));
+                        break;
                 }
             })
             .AddTransient<DbInitializer>()
